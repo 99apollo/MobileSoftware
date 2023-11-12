@@ -13,7 +13,7 @@ import android.widget.Toast;
 public class FoodView extends AppCompatActivity {
     private TextView displayDataTextView;
     private SharedPreferences sharedPreferences;
-    private static final String PREFERENCES_NAME = "FoodPreferences";
+    private static final String PREFERENCES_NAME = "MyPreferences";
     @Override
     protected void onCreate(@Nullable Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
@@ -41,11 +41,11 @@ public class FoodView extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
 
         // SharedPreferences에서 데이터를 가져와 텍스트 뷰에 표시
-        String place = sharedPreferences.getString("place", "");
-        String food = sharedPreferences.getString("food", "");
-        String sub = sharedPreferences.getString("sub", "");
+        String place = sharedPreferences.getString("selectedPlace", "");
+        String food = sharedPreferences.getString("foodName", "");
+        String sub = sharedPreferences.getString("subName", "");
         String evaluation = sharedPreferences.getString("evaluation", "");
-        String dateInfo = sharedPreferences.getString("dateInfo", "");
+        String dateInfo = sharedPreferences.getString("selectedDate", "");
         String cost = sharedPreferences.getString("cost", "");
 
         String displayedData = "장소: " + place + "\n음식: " + food + "\n반찬: " + sub
