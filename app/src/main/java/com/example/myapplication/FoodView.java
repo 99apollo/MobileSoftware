@@ -7,11 +7,20 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class FoodView extends AppCompatActivity {
-    private TextView displayDataTextView;
+    private RecyclerView recyclerView;
+    private FoodDataAdapter adapter;
     private SharedPreferences sharedPreferences;
     private static final String PREFERENCES_NAME = "MyPreferences";
     @Override
@@ -37,21 +46,23 @@ public class FoodView extends AppCompatActivity {
             }
         });
 
-        displayDataTextView = findViewById(R.id.display_data_textview);
-        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        recyclerView = findViewById(R.id.data_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // SharedPreferences에서 데이터를 가져와 텍스트 뷰에 표시
-        String place = sharedPreferences.getString("selectedPlace", "");
-        String food = sharedPreferences.getString("foodName", "");
-        String sub = sharedPreferences.getString("subName", "");
-        String evaluation = sharedPreferences.getString("evaluation", "");
-        String dateInfo = sharedPreferences.getString("selectedDate", "");
-        String cost = sharedPreferences.getString("cost", "");
+        // FoodData 리스트를 생성하여 어댑터에 전달
+        List<FoodData> dataList = createSampleData(); // 여기서 데이터를 채우는 방식은 사용자에게 따라 다를 수 있습니다.
+        adapter = new FoodDataAdapter(this, dataList);
 
-        String displayedData = "장소: " + place + "\n음식: " + food + "\n반찬: " + sub
-                + "\n평가: " + evaluation + "\n날짜 및 시간: " + dateInfo + "\n비용: " + cost;
+        recyclerView.setAdapter(adapter);
 
-        displayDataTextView.setText(displayedData);
+    }
+
+    // 샘플 데이터 생성
+    private List<FoodData> createSampleData() {
+        List<FoodData> dataList = new ArrayList<>();
+        // 여기서 FoodData 객체를 생성하고 dataList에 추가하여 리사이클러뷰에 표시할 데이터를 구성합니다.
+        // 예: dataList.add(new FoodData("이미지 경로", "음식 이름", "날짜"));
+        return dataList;
     }
 
 }
