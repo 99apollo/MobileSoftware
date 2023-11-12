@@ -3,14 +3,13 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,47 +21,69 @@ public class FoodView extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FoodDataAdapter adapter;
     private SharedPreferences sharedPreferences;
-    private static final String PREFERENCES_NAME = "MyPreferences";
+    private static final String PREFERENCES_NAME = "FoodPreferences";
+
     @Override
-    protected void onCreate(@Nullable Bundle saveInstanceState){
-        super.onCreate(saveInstanceState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.food_view_layout);
-        Button input=(Button) findViewById(R.id.view_Input);
-        Button analyze=(Button)findViewById(R.id.view_Analyze);
+
+        Button input = findViewById(R.id.view_Input);
+        Button analyze = findViewById(R.id.view_Analyze);
+
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"press",Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(getApplicationContext(),FoodInput.class);
+                Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), FoodInput.class);
                 startActivity(intent);
             }
         });
+
         analyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"press",Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(getApplicationContext(),FoodAnalyze.class);
+                Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), FoodAnalyze.class);
                 startActivity(intent);
             }
         });
+
+        SharedPreferences sharedPreferences1 = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences1.getAll();
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            // key와 value를 출력하거나 사용
+            Log.d("SharedPreferences", "Key: " + key + ", Value: " + value.toString());
+        }
 
         recyclerView = findViewById(R.id.data_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // FoodData 리스트를 생성하여 어댑터에 전달
-        List<FoodData> dataList = createSampleData(); // 여기서 데이터를 채우는 방식은 사용자에게 따라 다를 수 있습니다.
-        adapter = new FoodDataAdapter(this, dataList);
+        // SharedPreferences에서 데이터 개수를 가져옴
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        int dataSetCount = sharedPreferences.getInt("dataSetCount", 0);
 
-        recyclerView.setAdapter(adapter);
-
-    }
-
-    // 샘플 데이터 생성
-    private List<FoodData> createSampleData() {
+        // 데이터를 저장하고 있는 dataList을 초기화
         List<FoodData> dataList = new ArrayList<>();
-        // 여기서 FoodData 객체를 생성하고 dataList에 추가하여 리사이클러뷰에 표시할 데이터를 구성합니다.
-        // 예: dataList.add(new FoodData("이미지 경로", "음식 이름", "날짜"));
-        return dataList;
-    }
 
+        for (int i = 0; i < dataSetCount; i++) {
+            String dataSetKey = "data_set_" + i;
+            String imageFileName = sharedPreferences.getString(dataSetKey + "_imagePath", "");
+            String foodName = sharedPreferences.getString(dataSetKey + "_foodName", "");
+            String selectedDate = sharedPreferences.getString(dataSetKey + "_selectedDate", "");
+
+            // 각 데이터를 dataList에 추가
+            dataList.add(new FoodData(imageFileName, foodName, selectedDate));
+        }
+        Log.e("test",dataList.toString());
+
+        // FoodDataAdapter를 초기화하고 RecyclerView에 설정
+        adapter = new FoodDataAdapter(this, dataList);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
+    }
 }

@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.myapplication.FoodData;
+import com.example.myapplication.R;
 
 import java.util.List;
 
@@ -57,4 +59,6 @@ public class FoodDataAdapter extends RecyclerView.Adapter<FoodDataAdapter.ViewHo
             dateTextView = itemView.findViewById(R.id.dateTextView);
         }
     }
+
+
 }

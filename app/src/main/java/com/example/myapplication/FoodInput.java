@@ -11,9 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,10 +22,14 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Map;
 
 public class FoodInput extends AppCompatActivity {
 
@@ -94,16 +96,17 @@ public class FoodInput extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-
-
+                // 데이터 세트의 현재 개수를 가져옴, 만약 값이 없으면 0으로 초기화
+                int dataSetCount = sharedPreferences.getInt("dataSetCount", 0);
+                // 새로운 데이터 세트 키를 생성
+                String dataSetKey = "data_set_" + dataSetCount;
                 // 장소, 종류, 날짜 값을 가져와서 저장
                 String selectedPlace = (String) place.getText(); // 선택된 장소 값
                 String selectedType = (String) typeButton.getText(); // 선택된 종류 값
                 TextView date = findViewById(R.id.date_info);
                 String selectedDate = date.getText().toString(); // 선택된 날짜 값
 
-                // 데이터 세트 고유한 키 생성
-                String dataSetKey = "data_set_" + selectedPlace+selectedType+selectedDate; // 예: "data_set_1234567890"
+
 
                 // 이미지 저장을 위한 디렉토리 생성
                 File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -126,11 +129,15 @@ public class FoodInput extends AppCompatActivity {
                     outputStream.close();
 
                     // 이미지 파일의 경로를 SharedPreferences에 저장
-                    editor.putString(dataSetKey+"imagePath", imageFile.getAbsolutePath());
+                    editor.putString(dataSetKey+"_imagePath", imageFile.getAbsolutePath());
                     editor.apply();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                // 데이터 세트의 현재 개수를 1 증가시킴
+                dataSetCount++;
+                editor.putInt("dataSetCount", dataSetCount);
+                editor.apply();
                 // 데이터 저장
                 editor.putString(dataSetKey + "_selectedPlace", selectedPlace);
                 editor.putString(dataSetKey + "_selectedType", selectedType);
@@ -162,6 +169,7 @@ public class FoodInput extends AppCompatActivity {
 
                 finish();
             }
+
         });
     }
     //날짜 선택 관련 항목 코드
