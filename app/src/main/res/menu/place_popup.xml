@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/place1"
+        android:title="상록원 3층"/>
+    <item
+        android:id="@+id/place2"
+        android:title="상록원 2층"/>
+    <item
+        android:id="@+id/place3"
+        android:title="기숙사"/>
+    <item
+        android:id="@+id/place4"
+        android:title="기타"/>
+
+</menu>
