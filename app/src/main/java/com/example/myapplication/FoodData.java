@@ -11,10 +11,12 @@ public class FoodData {
     private String subName;
     private String evlText;
     private String cost;
+    private String drink;
+    private int calories;
 
     public FoodData(String imagePath, String food, String date,
                     String selectedPlace, String selectedType, String selectedDate,
-                    String imageFileName, String subName, String evlText, String cost) {
+                    String imageFileName, String subName, String evlText, String cost,String drink, int calories) {
         this.imagePath = imagePath;
         this.food = food;
         this.date = date;
@@ -25,6 +27,8 @@ public class FoodData {
         this.subName = subName;
         this.evlText = evlText;
         this.cost = cost;
+        this.drink=drink;
+        this.calories=calories;
     }
 
     public String getImagePath() {
@@ -65,5 +69,9 @@ public class FoodData {
 
     public String getCost() {
         return cost;
+    }
+
+    public String getDrink() {
+        return drink;
     }
 }

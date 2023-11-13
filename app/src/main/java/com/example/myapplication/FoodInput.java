@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -80,6 +82,7 @@ public class FoodInput extends AppCompatActivity {
                 showTypePopupMenu(view);
             }
         });
+
         imageView = findViewById(R.id.imageView);
         Button pickImageButton = findViewById(R.id.pickImageButton);
 
@@ -117,7 +120,7 @@ public class FoodInput extends AppCompatActivity {
                     storageDir.mkdirs();
                 }
                 // 이미지 파일의 이름 생성 (고유한 이름을 생성하는 것이 좋음)
-                String imageFileName = selectedPlace + selectedDate + selectedType+".jpg";
+                String imageFileName = Calendar.getInstance() +selectedPlace + selectedDate + selectedType+".jpg";
                 // 이미지 파일을 저장할 경로 생성
                 File imageFile = new File(storageDir, imageFileName);
                 // 이미지를 저장
@@ -132,7 +135,7 @@ public class FoodInput extends AppCompatActivity {
                     outputStream.close();
 
                     // 이미지 파일의 경로를 SharedPreferences에 저장
-                    editor.putString(dataSetKey+"_imagePath", imageFile.getAbsolutePath());
+                    editor.putString(dataSetKey, imageFile.getAbsolutePath());
                     editor.apply();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -153,10 +156,14 @@ public class FoodInput extends AppCompatActivity {
                 // 가격 입력
                 EditText costInput = findViewById(R.id.cost);
                 String cost = costInput.getText().toString();
+                //음료 입력
+                EditText drinkInput= findViewById(R.id.drink_input);
+                String drink=drinkInput.getText().toString();
+                int cal=calories(foodName,subName,drink);
                 // 데이터를 JSON으로 변환
-                FoodData data = new FoodData(imageFileName, foodName, selectedDate,
+                FoodData data = new FoodData(imageFile.getAbsolutePath(), foodName, selectedDate,
                         selectedPlace, selectedType, selectedDate,
-                        imageFileName, subName, evlText, cost);
+                        imageFileName, subName, evlText, cost,drink,cal);
                 String dataJson = new Gson().toJson(data);
 
                 // SharedPreferences에 저장
@@ -217,6 +224,19 @@ public class FoodInput extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 String place_name= (String) menuItem.getTitle();
                 type.setText(place_name);
+                if(type.getText().toString().equals("음료")){
+                    Log.e("typechoose",type.getText().toString());
+                    // 음식과 반찬 입력 레이아웃 숨김
+                    findViewById(R.id.constraintLayout2).setVisibility(View.GONE);
+                    // 음료와 음료 입력 레이아웃 표시
+                    findViewById(R.id.beverageLayout).setVisibility(View.VISIBLE);
+                }else {
+
+                    // 다른 종류가 선택된 경우, 음료와 음료 입력 레이아웃 숨김
+                    findViewById(R.id.beverageLayout).setVisibility(View.GONE);
+                    // 음식과 반찬 입력 레이아웃 표시
+                    findViewById(R.id.constraintLayout2).setVisibility(View.VISIBLE);
+                }
                 return true;
             }
         });
@@ -259,5 +279,27 @@ public class FoodInput extends AppCompatActivity {
             }
         }
     }
+//현재 칼로리 데이터 없으므로 임으로 고정 500,100,200 으로
+    public int calories(String food, String sub,String drink){
+        int totalCalories = 0;
+        // 음식 칼로리: 500 * 음식의 길이
+        if (food != null && !food.isEmpty()) {
+            int foodCalories = 500;
+            totalCalories += foodCalories;
+        }
 
+        // 반찬 칼로리: 100 * 반찬의 길이
+        if (sub != null && !sub.isEmpty()) {
+            int subCalories = 100;
+            totalCalories += subCalories;
+        }
+
+        // 음료 칼로리: 200 * 음료의 길이
+        if (drink != null && !drink.isEmpty()) {
+            int drinkCalories = 200;
+            totalCalories += drinkCalories;
+        }
+
+        return totalCalories;
+    }
 }

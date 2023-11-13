@@ -79,9 +79,12 @@ public class FoodView extends AppCompatActivity {
                 // JSON 데이터를 FoodData 객체로 파싱
                 FoodData data = new Gson().fromJson(dataJson, FoodData.class);
                 dataList.add(data);
+                Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
             }
+
+
         }
-        Log.e("test",dataList.toString());
+
 
         // FoodDataAdapter를 초기화하고 RecyclerView에 설정
         adapter = new FoodDataAdapter(this, dataList, new FoodDataAdapter.OnItemClickListener() {
