@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ public class FoodViewInfo extends AppCompatActivity {
         String subName = intent.getStringExtra("subName");
         String evaluation = intent.getStringExtra("evaluation");
         String cost = intent.getStringExtra("cost");
+        String drink=intent.getStringExtra("drink");
 // 이후 각 TextView에 데이터 설정
         TextView placeTextView = findViewById(R.id.viewPlace);
         TextView foodTextView = findViewById(R.id.food_text);
@@ -34,7 +36,20 @@ public class FoodViewInfo extends AppCompatActivity {
         TextView subNameTextView = findViewById(R.id.sub_text);
         TextView evaluationTextView = findViewById(R.id.evaluationText);
         TextView costTextView = findViewById(R.id.costText);
-
+        TextView drinkTextView=findViewById(R.id.drink_click);
+        if(type.equals("음료")){
+            Log.e("typechoose",type.toString());
+            // 음식과 반찬 입력 레이아웃 숨김
+            findViewById(R.id.constraintLayout2).setVisibility(View.GONE);
+            // 음료와 음료 입력 레이아웃 표시
+            findViewById(R.id.beverageLayout).setVisibility(View.VISIBLE);
+        }else {
+            // 다른 종류가 선택된 경우, 음료와 음료 입력 레이아웃 숨김
+            findViewById(R.id.beverageLayout).setVisibility(View.GONE);
+            // 음식과 반찬 입력 레이아웃 표시
+            findViewById(R.id.constraintLayout2).setVisibility(View.VISIBLE);
+        }
+        drinkTextView.setText(drink);
         placeTextView.setText(place);
         foodTextView.setText(food);
         dateTextView.setText(date);

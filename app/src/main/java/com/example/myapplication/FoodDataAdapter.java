@@ -35,9 +35,13 @@ public class FoodDataAdapter extends RecyclerView.Adapter<FoodDataAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FoodData foodData = dataList.get(position);
-
-        holder.foodTextView.setText("음식: " + foodData.getFood());
-        holder.dateTextView.setText("날짜: " + foodData.getDate());
+        String Type=foodData.getSelectedType();
+        if (Type.equals("음료")) {
+            holder.foodTextView.setText("음료: " + foodData.getDrink());
+        } else {
+            holder.foodTextView.setText("음식: " + foodData.getFood());
+        }
+        holder.dateTextView.setText("날짜: " + foodData.getSelectedDate());
 
         Glide.with(context)
                 .load(foodData.getImagePath())

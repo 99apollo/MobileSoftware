@@ -92,13 +92,19 @@ public class FoodView extends AppCompatActivity {
             public void onItemClick(FoodData foodData) {
                 Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
                 intent.putExtra("imagePath", foodData.getImagePath());
+                if (foodData.getSelectedType().equals("음료")) {
+                    intent.putExtra("food", foodData.getDrink());
+                } else {
+                    intent.putExtra("food", foodData.getFood());
+                }
+                String cost=String.valueOf(foodData.getCost());
                 intent.putExtra("food", foodData.getFood());
                 intent.putExtra("date", foodData.getSelectedDate());
                 intent.putExtra("place", foodData.getSelectedPlace());
                 intent.putExtra("type", foodData.getSelectedType());
                 intent.putExtra("subName", foodData.getSubName());
                 intent.putExtra("evaluation", foodData.getEvlText());
-                intent.putExtra("cost", foodData.getCost());
+                intent.putExtra("cost", cost);
                 startActivity(intent);
             }
         });
@@ -133,13 +139,19 @@ public class FoodView extends AppCompatActivity {
                     public void onItemClick(FoodData foodData) {
                         Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
                         intent.putExtra("imagePath", foodData.getImagePath());
+                        if (foodData.getSelectedType().equals("음료")) {
+                            intent.putExtra("food", foodData.getDrink());
+                        } else {
+                            intent.putExtra("food", foodData.getFood());
+                        }
+                        String cost=String.valueOf(foodData.getCost());
                         intent.putExtra("food", foodData.getFood());
                         intent.putExtra("date", foodData.getSelectedDate());
                         intent.putExtra("place", foodData.getSelectedPlace());
                         intent.putExtra("type", foodData.getSelectedType());
                         intent.putExtra("subName", foodData.getSubName());
                         intent.putExtra("evaluation", foodData.getEvlText());
-                        intent.putExtra("cost", foodData.getCost());
+                        intent.putExtra("cost", cost);
                         startActivity(intent);
                     }
                 });
@@ -193,13 +205,19 @@ public class FoodView extends AppCompatActivity {
             public void onItemClick(FoodData foodData) {
                 Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
                 intent.putExtra("imagePath", foodData.getImagePath());
+                if (foodData.getSelectedType().equals("음료")) {
+                    intent.putExtra("food", foodData.getDrink());
+                } else {
+                    intent.putExtra("food", foodData.getFood());
+                }
+                String cost=String.valueOf(foodData.getCost());
                 intent.putExtra("food", foodData.getFood());
                 intent.putExtra("date", foodData.getSelectedDate());
                 intent.putExtra("place", foodData.getSelectedPlace());
                 intent.putExtra("type", foodData.getSelectedType());
                 intent.putExtra("subName", foodData.getSubName());
                 intent.putExtra("evaluation", foodData.getEvlText());
-                intent.putExtra("cost", foodData.getCost());
+                intent.putExtra("cost", cost);
                 startActivity(intent);
             }
         });

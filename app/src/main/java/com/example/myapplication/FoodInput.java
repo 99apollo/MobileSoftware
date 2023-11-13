@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -68,12 +70,22 @@ public class FoodInput extends AppCompatActivity {
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog dialog = new DatePickerDialog(FoodInput.this, callbackMethod, 2022, 11, 12);
-                dialog.show();
                 InitializeView();
                 InitializeListener();
+                DatePickerDialog dialog = new DatePickerDialog(FoodInput.this, callbackMethod, 2023, 11, 12);
+
+                dialog.show();
+
             }
         });
+        Button timeButton = findViewById(R.id.time_info); // 시간 선택
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimePickerDialog(timeButton);
+            }
+        });
+
         //종류
         Button typeButton=(Button) findViewById(R.id.typeChoose);
         typeButton.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +121,11 @@ public class FoodInput extends AppCompatActivity {
                 // 장소, 종류, 날짜 값을 가져와서 저장
                 String selectedPlace = (String) place.getText(); // 선택된 장소 값
                 String selectedType = (String) typeButton.getText(); // 선택된 종류 값
-                TextView date = findViewById(R.id.date_info);
+                Button date = findViewById(R.id.select_date_time_button);
+                Button time=findViewById(R.id.time_info);
                 String selectedDate = date.getText().toString(); // 선택된 날짜 값
-
-
+                String selectedTime = time.getText().toString();
+                String madeTime=selectedDate+selectedTime;
 
                 // 이미지 저장을 위한 디렉토리 생성
                 File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -120,7 +133,7 @@ public class FoodInput extends AppCompatActivity {
                     storageDir.mkdirs();
                 }
                 // 이미지 파일의 이름 생성 (고유한 이름을 생성하는 것이 좋음)
-                String imageFileName = Calendar.getInstance() +selectedPlace + selectedDate + selectedType+".jpg";
+                String imageFileName = selectedPlace + selectedDate + selectedType+dataSetCount+".jpg";
                 // 이미지 파일을 저장할 경로 생성
                 File imageFile = new File(storageDir, imageFileName);
                 // 이미지를 저장
@@ -162,8 +175,8 @@ public class FoodInput extends AppCompatActivity {
                 int cal=calories(foodName,subName,drink);
                 // 데이터를 JSON으로 변환
                 FoodData data = new FoodData(imageFile.getAbsolutePath(), foodName, selectedDate,
-                        selectedPlace, selectedType, selectedDate,
-                        imageFileName, subName, evlText, cost,drink,cal);
+                        selectedPlace, selectedType, madeTime,
+                        imageFileName, subName, evlText, Integer.parseInt(cost),drink,cal);
                 String dataJson = new Gson().toJson(data);
 
                 // SharedPreferences에 저장
@@ -178,7 +191,7 @@ public class FoodInput extends AppCompatActivity {
     //날짜 선택 관련 항목 코드
     public void InitializeView()
     {
-        textView_Date = (TextView)findViewById(R.id.date_info);
+        textView_Date = (TextView)findViewById(R.id.select_date_time_button);
     }
 
     public void InitializeListener()
@@ -192,6 +205,24 @@ public class FoodInput extends AppCompatActivity {
             }
         };
     }
+    // TimePickerDialog를 열고 시간 선택
+    private void showTimePickerDialog(final Button timeTextView) {
+        // 현재 시간 정보 가져오기
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                // 시간을 TextView에 설정
+                timeTextView.setText(hourOfDay + "시" + minute + "분");
+            }
+        }, hour, minute, false);
+
+        timePickerDialog.show();
+    }
+
     //장소 관련
     private void showDynamicPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);

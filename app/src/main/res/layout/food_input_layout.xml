@@ -232,17 +232,16 @@
             android:text="날짜 선택"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.16"
+            app:layout_constraintHorizontal_bias="0.26"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/date_info"
+        <Button
+            android:id="@+id/time_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="날짜를 골라주세요"
-
+            android:text="시간선택"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/select_date_time_button"
