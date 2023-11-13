@@ -101,13 +101,49 @@ public class FoodView extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
-
+        Button all=findViewById(R.id.allFood);
         Button breakfast=findViewById(R.id.breakfast);
         Button Lunch=findViewById(R.id.lunch);
         Button dinner = findViewById(R.id.Dinner);
         Button drink=findViewById(R.id.drink);
 
+        all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 데이터를 저장하고 있는 dataList을 초기화
+                List<FoodData> dataList = new ArrayList<>();
 
+                for (int i = 0; i < dataSetCount; i++) {
+                    String dataSetKey = "data_set_" + i;
+                    String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
+                    if (!dataJson.isEmpty()) {
+                        // JSON 데이터를 FoodData 객체로 파싱
+                        FoodData data = new Gson().fromJson(dataJson, FoodData.class);
+                        dataList.add(data);
+                    }
+                }
+                Log.e("test",dataList.toString());
+
+                // FoodDataAdapter를 초기화하고 RecyclerView에 설정
+                adapter = new FoodDataAdapter(FoodView.this, dataList, new FoodDataAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(FoodData foodData) {
+                        Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
+                        intent.putExtra("imagePath", foodData.getImagePath());
+                        intent.putExtra("food", foodData.getFood());
+                        intent.putExtra("date", foodData.getSelectedDate());
+                        intent.putExtra("place", foodData.getSelectedPlace());
+                        intent.putExtra("type", foodData.getSelectedType());
+                        intent.putExtra("subName", foodData.getSubName());
+                        intent.putExtra("evaluation", foodData.getEvlText());
+                        intent.putExtra("cost", foodData.getCost());
+                        startActivity(intent);
+                    }
+                });
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
+            }
+        });
         breakfast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +188,16 @@ public class FoodView extends AppCompatActivity {
         adapter = new FoodDataAdapter(this, filteredDataList, new FoodDataAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(FoodData foodData) {
-                // 이전과 동일하게 아이템 클릭 처리
+                Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
+                intent.putExtra("imagePath", foodData.getImagePath());
+                intent.putExtra("food", foodData.getFood());
+                intent.putExtra("date", foodData.getSelectedDate());
+                intent.putExtra("place", foodData.getSelectedPlace());
+                intent.putExtra("type", foodData.getSelectedType());
+                intent.putExtra("subName", foodData.getSubName());
+                intent.putExtra("evaluation", foodData.getEvlText());
+                intent.putExtra("cost", foodData.getCost());
+                startActivity(intent);
             }
         });
         recyclerView.setAdapter(adapter);
