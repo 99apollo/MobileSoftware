@@ -25,6 +25,7 @@
         <activity android:name=".FoodInput"/>
         <activity android:name=".FoodAnalyze"/>
         <activity android:name=".FoodView"/>
+        <activity android:name=".FoodViewInfo"/>
 
     </application>
     <uses-permission android:name="android.permission.CAMERA" />

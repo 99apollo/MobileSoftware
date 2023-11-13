@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -72,18 +74,89 @@ public class FoodView extends AppCompatActivity {
 
         for (int i = 0; i < dataSetCount; i++) {
             String dataSetKey = "data_set_" + i;
-            String imageFileName = sharedPreferences.getString(dataSetKey + "_imagePath", "");
-            String foodName = sharedPreferences.getString(dataSetKey + "_foodName", "");
-            String selectedDate = sharedPreferences.getString(dataSetKey + "_selectedDate", "");
-
-            // 각 데이터를 dataList에 추가
-            dataList.add(new FoodData(imageFileName, foodName, selectedDate));
+            String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
+            if (!dataJson.isEmpty()) {
+                // JSON 데이터를 FoodData 객체로 파싱
+                FoodData data = new Gson().fromJson(dataJson, FoodData.class);
+                dataList.add(data);
+            }
         }
         Log.e("test",dataList.toString());
 
         // FoodDataAdapter를 초기화하고 RecyclerView에 설정
-        adapter = new FoodDataAdapter(this, dataList);
+        adapter = new FoodDataAdapter(this, dataList, new FoodDataAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodData foodData) {
+                Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
+                intent.putExtra("imagePath", foodData.getImagePath());
+                intent.putExtra("food", foodData.getFood());
+                intent.putExtra("date", foodData.getSelectedDate());
+                intent.putExtra("place", foodData.getSelectedPlace());
+                intent.putExtra("type", foodData.getSelectedType());
+                intent.putExtra("subName", foodData.getSubName());
+                intent.putExtra("evaluation", foodData.getEvlText());
+                intent.putExtra("cost", foodData.getCost());
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
+
+        Button breakfast=findViewById(R.id.breakfast);
+        Button Lunch=findViewById(R.id.lunch);
+        Button dinner = findViewById(R.id.Dinner);
+        Button drink=findViewById(R.id.drink);
+
+
+        breakfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 조식 데이터만 표시
+                filterData("조식",dataList);
+            }
+        });
+
+        Lunch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 중식 데이터만 표시
+                filterData("중식",dataList);
+            }
+        });
+
+        dinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 석식 데이터만 표시
+                filterData("석식",dataList);
+            }
+        });
+
+        drink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 음료 데이터만 표시
+                filterData("음료",dataList);
+            }
+        });
+    }
+
+    private void filterData(String dataType,List<FoodData> dataList) {
+        List<FoodData> filteredDataList = new ArrayList<>();
+        for (FoodData data : dataList) {
+            if (data.getSelectedType().equals(dataType)) {
+                filteredDataList.add(data);
+            }
+        }
+
+        adapter = new FoodDataAdapter(this, filteredDataList, new FoodDataAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodData foodData) {
+                // 이전과 동일하게 아이템 클릭 처리
+            }
+        });
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
     }
+
 }

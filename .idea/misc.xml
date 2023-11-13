@@ -15,6 +15,13 @@
         <entry key="..\:/12345678/app/src/main/res/menu/month_popup.xml" value="0.5484375" />
         <entry key="..\:/12345678/app/src/main/res/menu/place_popup.xml" value="0.5484375" />
         <entry key="..\:/12345678/app/src/main/res/menu/type_popup.xml" value="0.5484375" />
+        <entry key="..\:/Users/99apo/AndroidStudioProjects/MobileSoftware/app/src/main/res/layout/activity_main.xml" value="0.3" />
+        <entry key="..\:/Users/99apo/AndroidStudioProjects/MobileSoftware/app/src/main/res/layout/bottom_sheet.xml" value="0.25" />
+        <entry key="..\:/Users/99apo/AndroidStudioProjects/MobileSoftware/app/src/main/res/layout/food_analyze_layout.xml" value="0.3" />
+        <entry key="..\:/Users/99apo/AndroidStudioProjects/MobileSoftware/app/src/main/res/layout/food_input_layout.xml" value="0.3" />
+        <entry key="..\:/Users/99apo/AndroidStudioProjects/MobileSoftware/app/src/main/res/layout/food_view_layout.xml" value="0.25" />
+        <entry key="..\:/Users/99apo/AndroidStudioProjects/MobileSoftware/app/src/main/res/layout/view_recyclerview_click.xml" value="0.3" />
+        <entry key="..\:/Users/99apo/AndroidStudioProjects/MobileSoftware/app/src/main/res/layout/view_recyclerview_item.xml" value="0.3" />
       </map>
     </option>
   </component>

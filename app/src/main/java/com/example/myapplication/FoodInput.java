@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -138,33 +141,26 @@ public class FoodInput extends AppCompatActivity {
                 dataSetCount++;
                 editor.putInt("dataSetCount", dataSetCount);
                 editor.apply();
-                // 데이터 저장
-                editor.putString(dataSetKey + "_selectedPlace", selectedPlace);
-                editor.putString(dataSetKey + "_selectedType", selectedType);
-                editor.putString(dataSetKey + "_selectedDate", selectedDate);
-                editor.putString(dataSetKey + "_imageFileName", imageFileName);
-
                 // 음식 입력
                 EditText foodInput = findViewById(R.id.food_input);
                 String foodName = foodInput.getText().toString();
-                editor.putString(dataSetKey + "_foodName", foodName);
-
                 // 반찬 입력
                 EditText subInput = findViewById(R.id.sub_input);
                 String subName = subInput.getText().toString();
-                editor.putString(dataSetKey + "_subName", subName);
-
                 // 평가 입력
                 EditText evlInput = findViewById(R.id.evaluation);
                 String evlText = evlInput.getText().toString();
-                editor.putString(dataSetKey + "_evaluation", evlText);
-
                 // 가격 입력
                 EditText costInput = findViewById(R.id.cost);
                 String cost = costInput.getText().toString();
-                editor.putString(dataSetKey + "_cost", cost);
+                // 데이터를 JSON으로 변환
+                FoodData data = new FoodData(imageFileName, foodName, selectedDate,
+                        selectedPlace, selectedType, selectedDate,
+                        imageFileName, subName, evlText, cost);
+                String dataJson = new Gson().toJson(data);
 
-                // 변경 사항을 적용
+                // SharedPreferences에 저장
+                editor.putString(dataSetKey, dataJson);
                 editor.apply();
 
                 finish();

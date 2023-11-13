@@ -17,10 +17,12 @@ import java.util.List;
 public class FoodDataAdapter extends RecyclerView.Adapter<FoodDataAdapter.ViewHolder> {
     private Context context;
     private List<FoodData> dataList;
+    private OnItemClickListener onItemClickListener; // 클릭 이벤트 리스너
 
-    public FoodDataAdapter(Context context, List<FoodData> dataList) {
+    public FoodDataAdapter(Context context, List<FoodData> dataList, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.dataList = dataList;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -40,6 +42,15 @@ public class FoodDataAdapter extends RecyclerView.Adapter<FoodDataAdapter.ViewHo
         Glide.with(context)
                 .load(foodData.getImagePath())
                 .into(holder.imageView);
+        // 항목을 클릭했을 때의 동작 설정
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(foodData);
+                }
+            }
+        });
     }
 
     @Override
@@ -60,5 +71,8 @@ public class FoodDataAdapter extends RecyclerView.Adapter<FoodDataAdapter.ViewHo
         }
     }
 
-
+    // 항목 클릭 이벤트 리스너 인터페이스
+    public interface OnItemClickListener {
+        void onItemClick(FoodData foodData);
+    }
 }
