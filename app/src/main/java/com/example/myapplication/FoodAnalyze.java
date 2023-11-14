@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,17 +14,26 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,6 +45,7 @@ public class FoodAnalyze extends AppCompatActivity {
     private RecyclerView recyclerView2;
     private CalendarView calendarView;
     private FoodAnalyzeAdapter adapter1;
+    private FoodAnalyzeAdapter adapter2;
     private TextView displayDataTextView;
     private SharedPreferences sharedPreferences;
     private static final String PREFERENCES_NAME = "FoodPreferences";
@@ -54,6 +65,8 @@ public class FoodAnalyze extends AppCompatActivity {
         int dinnerCal=0;
         int drinkCal=0;
         int item=0;
+        List<CalendarDay> calendarDayList = new ArrayList<>();
+        CalendarDay[] calendarDay;
         for(FoodData entry:dataList){
             item++;
             String Type=entry.getSelectedType();
@@ -69,6 +82,7 @@ public class FoodAnalyze extends AppCompatActivity {
                 drinkCal+=entry.getCalories();
             }
             totalCal+=entry.getCalories();
+            calendarDayList.add(convertToCalendarDay(entry.getDate()));
         }
         TextView recent =findViewById(R.id.recent30days);
         recent.setText("최근 30일\n 총 칼로리: "+totalCal+"\n 총 비용 : "+totalCost+"\n 조식 칼로리 : "+brekfastCal+"\n 중식 칼로리 : "+lunchCal+"\n 석식 칼로리 : "+dinnerCal+"\n 음료 칼로리 : "+drinkCal);
@@ -82,27 +96,70 @@ public class FoodAnalyze extends AppCompatActivity {
 //// 어댑터 초기화
 //        adapter1 = new FoodAnalyzeAdapter(this, dataList);
 //        recyclerView2.setAdapter(adapter1);
-        // CalendarView 초기화
-        calendarView = findViewById(R.id.calenderView);
 
         // RecyclerView 초기화
         recyclerView2 = findViewById(R.id.recyclerView2);
         recyclerView2.setLayoutManager(new LinearLayoutManager(this));
         adapter1 = new FoodAnalyzeAdapter(this, new ArrayList<>());
 
+        adapter2 = new FoodAnalyzeAdapter(this, new ArrayList<>());
+        //MaterialCalendarView에 사용
+        MaterialCalendarView materialCalendarView = findViewById(R.id.customCalendarView);
+        materialCalendarView.setSelectedDate(CalendarDay.today());
+        Log.e("날짜 형식 확인",materialCalendarView.getSelectedDate().toString());
+        for(CalendarDay entry:calendarDayList){
+            EventDecorator eventDecorator = new EventDecorator(Color.RED, Collections.singletonList(entry));
+            materialCalendarView.addDecorator(eventDecorator);
+        }
 
-        // CalendarView에 선택 날짜 변경 리스너 추가
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 // 사용자가 선택한 날짜를 이용하여 데이터를 가져와 RecyclerView를 업데이트
-                String selectedDate = year + "년" + (month + 1) + "월" + dayOfMonth + "일";
+                int year = date.getYear();
+                int month = date.getMonth(); // 월은 0부터 시작하므로 1을 더해줍니다.
+                int dayOfMonth = date.getDay();
+
+                String selectedDate = year + "년" + month + "월" + dayOfMonth + "일";
+                Log.e("선택 날짜",selectedDate);
                 List<FoodData> dataList1 = getFoodDataForSelectedDate(selectedDate);
-                adapter1 = new FoodAnalyzeAdapter(FoodAnalyze.this, dataList1);
-                recyclerView2.setAdapter(adapter1);
+                adapter2 = new FoodAnalyzeAdapter(FoodAnalyze.this, dataList1);
+                recyclerView2.setAdapter(adapter2);
             }
         });
     }
+    public static CalendarDay convertToCalendarDay(String dateStr) {
+        // dateStr을 파싱하여 year, month, day를 추출
+        // 예: "2023년11월24일" -> year=2023, month=11, day=24
+        int year, month, day;
+
+        // 날짜 포맷 지정
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년MM월dd일", Locale.getDefault());
+
+        try {
+            // SimpleDateFormat을 사용하여 Date 객체로 파싱
+            Date date = dateFormat.parse(dateStr);
+
+            // Date 객체를 사용하여 년, 월, 일 추출
+            if (date != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+
+                year = calendar.get(Calendar.YEAR);
+                month = calendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 1을 더함
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                return CalendarDay.from(year, month, day);
+            } else {
+                System.out.println("날짜 형식이 올바르지 않습니다.");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public List<FoodData> getAllFoodDataFromPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         Map<String, ?> allEntries = sharedPreferences.getAll();
@@ -172,5 +229,26 @@ public class FoodAnalyze extends AppCompatActivity {
         }
 
         return foodDataList;
+    }
+
+    public class EventDecorator implements DayViewDecorator {
+
+        private final int color;
+        private final HashSet<CalendarDay> dates;
+
+        public EventDecorator(int color, Collection<CalendarDay> dates) {
+            this.color = color;
+            this.dates = new HashSet<>(dates);
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return dates.contains(day);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.addSpan(new DotSpan(5, color));
+        }
     }
 }

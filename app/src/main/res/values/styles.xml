@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 기본 텍스트 스타일 -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- 기타 스타일 정의 -->
+    </style>
+
+    <!-- CalendarView에서 날짜 텍스트 스타일 -->
+    <style name="CalendarTextAppearance">
+        <item name="android:textColor">@color/calendarTextDefaultColor</item> <!-- 기본 색상 -->
+        <item name="android:textSize">14sp</item> <!-- 텍스트 크기 -->
+        <!-- 다른 스타일 속성들을 여기에 추가할 수 있습니다. -->
+    </style>
+
+</resources>

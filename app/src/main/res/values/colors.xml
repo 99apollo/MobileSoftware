@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- 기본 텍스트 색상 -->
+    <color name="calendarTextDefaultColor">#000000</color> <!-- 여기서는 검은색을 사용하겠습니다. -->
+
+    <color name="dataAvailableColor">#FF0000</color> <!-- 여기서는 빨간색을 사용하겠습니다. -->
 </resources>
