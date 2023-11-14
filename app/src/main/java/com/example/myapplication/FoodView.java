@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -112,8 +114,6 @@ public class FoodView extends AppCompatActivity {
         adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
         Button all=findViewById(R.id.allFood);
         Button breakfast=findViewById(R.id.breakfast);
-        Button Lunch=findViewById(R.id.lunch);
-        Button dinner = findViewById(R.id.Dinner);
         Button drink=findViewById(R.id.drink);
 
         all.setOnClickListener(new View.OnClickListener() {
@@ -162,36 +162,61 @@ public class FoodView extends AppCompatActivity {
         breakfast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 조식 데이터만 표시
-                filterData("조식",dataList);
-            }
-        });
+                showDynamicPopupMenu(view,dataList);
 
-        Lunch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 중식 데이터만 표시
-                filterData("중식",dataList);
-            }
-        });
-
-        dinner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 석식 데이터만 표시
-                filterData("석식",dataList);
             }
         });
 
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 음료 데이터만 표시
-                filterData("음료",dataList);
+                showTypePopupMenu(view,dataList);
+
             }
         });
-    }
 
+
+    }
+    private void typeChoose(Button item,List<FoodData> dataList){
+        String temp= (String) item.getText();
+        if(temp.equals("조식")){
+            filterData("조식",dataList);
+        }else if(temp.equals("중식")){
+            filterData("중식",dataList);
+        }else if(temp.equals("석식")){
+            filterData("석식",dataList);
+        }else{
+            filterData("음료",dataList);
+        }
+    }
+    private void placeChoose(Button item,List<FoodData> dataList){
+        String temp= (String) item.getText();
+        if(temp.equals("상록원 3층")){
+            filterPlaceData("상록원 3층",dataList);
+        }else if(temp.equals("상록원 2층")){
+            filterPlaceData("상록원 2층",dataList);
+        }else if(temp.equals("기숙사")){
+            filterPlaceData("기숙사",dataList);
+        }else{
+            filterPlaceData("기타",dataList);
+        }
+    }
+    private void showDynamicPopupMenu(View view,List<FoodData> dataList) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        Button place=(Button) findViewById(R.id.breakfast);
+        popupMenu.getMenuInflater().inflate(R.menu.place_popup,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                String place_name= (String) menuItem.getTitle();
+                place.setText(place_name);
+                placeChoose(place,dataList);
+                return true;
+            }
+        });
+
+        popupMenu.show();
+    }
     private void filterData(String dataType,List<FoodData> dataList) {
         List<FoodData> filteredDataList = new ArrayList<>();
         for (FoodData data : dataList) {
@@ -224,5 +249,52 @@ public class FoodView extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
     }
+    private void filterPlaceData(String dataType,List<FoodData> dataList) {
+        List<FoodData> filteredDataList = new ArrayList<>();
+        for (FoodData data : dataList) {
+            if (data.getSelectedPlace().equals(dataType)) {
+                filteredDataList.add(data);
+            }
+        }
 
+        adapter = new FoodDataAdapter(this, filteredDataList, new FoodDataAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodData foodData) {
+                Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
+                intent.putExtra("imagePath", foodData.getImagePath());
+                if (foodData.getSelectedType().equals("음료")) {
+                    intent.putExtra("food", foodData.getDrink());
+                } else {
+                    intent.putExtra("food", foodData.getFood());
+                }
+                String cost=String.valueOf(foodData.getCost());
+                intent.putExtra("food", foodData.getFood());
+                intent.putExtra("date", foodData.getSelectedDate());
+                intent.putExtra("place", foodData.getSelectedPlace());
+                intent.putExtra("type", foodData.getSelectedType());
+                intent.putExtra("subName", foodData.getSubName());
+                intent.putExtra("evaluation", foodData.getEvlText());
+                intent.putExtra("cost", cost);
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
+    }
+    private void showTypePopupMenu(View view,List<FoodData> dataList) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        Button type=(Button) findViewById(R.id.drink);
+        popupMenu.getMenuInflater().inflate(R.menu.type_popup,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                String place_name= (String) menuItem.getTitle();
+                type.setText(place_name);
+                typeChoose(type,dataList);
+                return true;
+            }
+        });
+
+        popupMenu.show();
+    }
 }
