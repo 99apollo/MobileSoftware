@@ -25,10 +25,10 @@
             android:text="음식: " />
 
         <TextView
-            android:id="@+id/AdateTextView"
+            android:id="@+id/Atype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="날짜: " />
+            android:text="종류: " />
         <TextView
             android:id="@+id/AcostTextView"
             android:layout_width="wrap_content"

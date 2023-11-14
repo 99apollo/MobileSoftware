@@ -40,7 +40,7 @@ public class FoodAnalyzeAdapter extends RecyclerView.Adapter<FoodAnalyzeAdapter.
         } else {
             holder.AfoodTextView.setText("음식: " + foodData.getFood());
         }
-        holder.AdateTextView.setText("날짜: " + foodData.getSelectedDate());
+        holder.Atype.setText("종류: " + foodData.getSelectedType());
         holder.AplaceTextView.setText("장소: "+foodData.getSelectedPlace());
         holder.AcalTextView.setText("칼로리: "+foodData.getCalories());
         holder.AcostTextView.setText("가격: "+foodData.getCost());
@@ -59,15 +59,15 @@ public class FoodAnalyzeAdapter extends RecyclerView.Adapter<FoodAnalyzeAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView AimageView;
         TextView AfoodTextView;
-        TextView AdateTextView;
         TextView AcostTextView;
         TextView AcalTextView;
         TextView AplaceTextView;
+        TextView Atype;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             AimageView = itemView.findViewById(R.id.AimageView);
             AfoodTextView = itemView.findViewById(R.id.AfoodTextView);
-            AdateTextView = itemView.findViewById(R.id.AdateTextView);
+            Atype = itemView.findViewById(R.id.Atype);
             AcostTextView=itemView.findViewById(R.id.AcostTextView);
             AcalTextView=itemView.findViewById(R.id.AcalTextView);
             AplaceTextView=itemView.findViewById(R.id.AplaceTextView);
