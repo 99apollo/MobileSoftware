@@ -72,7 +72,7 @@ public class FoodInput extends AppCompatActivity {
             public void onClick(View view) {
                 InitializeView();
                 InitializeListener();
-                DatePickerDialog dialog = new DatePickerDialog(FoodInput.this, callbackMethod, 2023, 11, 12);
+                DatePickerDialog dialog = new DatePickerDialog(FoodInput.this, callbackMethod, 2023, 10, 12);
 
                 dialog.show();
 
@@ -201,7 +201,8 @@ public class FoodInput extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
-                textView_Date.setText(year + "년" + monthOfYear + "월" + dayOfMonth + "일");
+                int realMonth=monthOfYear+1;
+                textView_Date.setText(year + "년" + realMonth + "월" + dayOfMonth + "일");
             }
         };
     }
