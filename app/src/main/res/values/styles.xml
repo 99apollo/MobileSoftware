@@ -11,5 +11,21 @@
         <item name="android:textSize">14sp</item> <!-- 텍스트 크기 -->
         <!-- 다른 스타일 속성들을 여기에 추가할 수 있습니다. -->
     </style>
+    <style name="AppTheme1" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!-- 버튼 스타일 -->
+    <style name="AppButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
+    <!-- 텍스트 뷰 스타일 -->
+    <style name="AppTextView" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

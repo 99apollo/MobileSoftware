@@ -23,7 +23,9 @@
             android:text="전체"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/tv_solid_rect"
+            />
 
 
         <Button
@@ -34,7 +36,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/drink"
             app:layout_constraintStart_toEndOf="@+id/allFood"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/tv_stroke_rect"
+            />
 
         <Button
             android:id="@+id/drink"
@@ -43,10 +47,13 @@
             android:text="종류"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/tv_stroke_rect"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -58,7 +65,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/data_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="610dp"
             android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +86,9 @@
         android:layout_marginStart="44dp"
         android:text="식사 입력"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/tv_solid_rect"
+        />
 
     <Button
         android:id="@+id/view_Analyze"
@@ -88,9 +97,9 @@
         android:layout_marginEnd="36dp"
         android:text="식사 분석"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/tv_stroke_rect"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

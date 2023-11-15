@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"press",Toast.LENGTH_LONG).show();
                 Intent intent=new Intent(getApplicationContext(),FoodInput.class);
                 startActivity(intent);
             }
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"press",Toast.LENGTH_LONG).show();
                 Intent intent=new Intent(getApplicationContext(),FoodView.class);
                 startActivity(intent);
             }
@@ -36,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         analyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"press",Toast.LENGTH_LONG).show();
                 Intent intent=new Intent(getApplicationContext(),FoodAnalyze.class);
                 startActivity(intent);
             }

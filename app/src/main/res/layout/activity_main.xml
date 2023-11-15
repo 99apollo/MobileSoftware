@@ -4,40 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".MainActivity"
+    android:background="@drawable/dongguk">
 
 
     <Button
         android:id="@+id/inputFood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/tv_stroke_rect"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="식사 입력"
         app:layout_constraintBottom_toBottomOf="@+id/analyzeFood"
         app:layout_constraintEnd_toEndOf="@+id/analyzeFood"
+        app:layout_constraintHorizontal_bias="0.195"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.714" />
 
     <Button
         android:id="@+id/viewFood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/tv_stroke_rect"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="식사 보기"
         app:layout_constraintBottom_toBottomOf="@+id/analyzeFood"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.772"
         app:layout_constraintStart_toStartOf="@+id/analyzeFood"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.714"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/analyzeFood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/tv_solid_rect"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="식사 분석"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.748" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

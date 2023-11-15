@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -182,7 +181,13 @@ public class FoodInput extends AppCompatActivity {
                 // SharedPreferences에 저장
                 editor.putString(dataSetKey, dataJson);
                 editor.apply();
-
+                // 이전 페이지가 FoodView.class에 해당하는 경우에만 업데이트 실행
+                if (getCallingActivity() != null && getCallingActivity().getClassName().equals("com.example.myapplication.FoodView")) {
+                    Intent intent = new Intent(getApplicationContext(), FoodView.class);
+                    // 필요한 경우에 데이터를 intent에 추가
+                    // intent.putExtra("key", value);
+                    startActivity(intent);
+                }
                 finish();
             }
 

@@ -133,6 +133,8 @@ public class FoodView extends AppCompatActivity {
                 }
                 Log.e("test",dataList.toString());
 
+                breakfast.setText("장소");
+                drink.setText("종류");
                 // FoodDataAdapter를 초기화하고 RecyclerView에 설정
                 adapter = new FoodDataAdapter(FoodView.this, dataList, new FoodDataAdapter.OnItemClickListener() {
                     @Override
@@ -219,11 +221,21 @@ public class FoodView extends AppCompatActivity {
     }
     private void filterData(String dataType,List<FoodData> dataList) {
         List<FoodData> filteredDataList = new ArrayList<>();
+        Button place = findViewById(R.id.breakfast);
         for (FoodData data : dataList) {
             if (data.getSelectedType().equals(dataType)) {
-                filteredDataList.add(data);
+
+                if(place.getText().equals("장소")){
+                    filteredDataList.add(data);
+                }else{
+                    if(data.getSelectedPlace().equals(place.getText())){
+                        filteredDataList.add(data);
+                    }
+                }
             }
         }
+
+
 
         adapter = new FoodDataAdapter(this, filteredDataList, new FoodDataAdapter.OnItemClickListener() {
             @Override
@@ -251,9 +263,16 @@ public class FoodView extends AppCompatActivity {
     }
     private void filterPlaceData(String dataType,List<FoodData> dataList) {
         List<FoodData> filteredDataList = new ArrayList<>();
+        Button type = findViewById(R.id.drink);
         for (FoodData data : dataList) {
             if (data.getSelectedPlace().equals(dataType)) {
-                filteredDataList.add(data);
+                if(type.getText().equals("종류")){
+                    filteredDataList.add(data);
+                }else{
+                    if(data.getSelectedPlace().equals(type.getText())){
+                        filteredDataList.add(data);
+                    }
+                }
             }
         }
 
