@@ -5,12 +5,19 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.format.DateUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,12 +28,18 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class DayInfo extends AppCompatActivity {
     private RecyclerView recyclerView1, recyclerView2, recyclerView3, recyclerView4, recyclerView5;
@@ -37,6 +50,7 @@ public class DayInfo extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener callbackMethod;
     private static final String PREFERENCES_NAME = "FoodPreferences";
     private FoodAnalyzeAdapter adapter1,adapter2,adapter3,adapter4;
+
     protected void onCreate(@Nullable Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         setContentView(R.layout.view_test_layout);
@@ -142,37 +156,96 @@ public class DayInfo extends AppCompatActivity {
             }
 
         });
-        //오늘 날짜
-        Long today = MaterialDatePicker.todayInUtcMilliseconds();
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //InitializeView();
-                //InitializeListener();
-                //showDatePickerDialog();
-                MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
-                builder.setTitleText("Date Picker")
-                        .setSelection(today) // 오늘 날짜 셋팅
-                        .setTheme(R.style.AppTheme); // AppTheme을 여기에 사용
-
-                MaterialDatePicker<Long> materialDatePicker = builder.build();
-
-                materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
-
-                // 확인 버튼
-                materialDatePicker.addOnPositiveButtonClickListener(selection -> {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년MM월d일");
-                    Date date = new Date();
-                    date.setTime(selection);
-
-                    String dateString = simpleDateFormat.format(date);
-
-                    dateButton.setText(dateString);
-                });
+                InitializeView();
+                InitializeListener(foodList);
+                showDatePickerDialog();
+                recyclerView4.setVisibility(View.GONE);
+                recyclerView3.setVisibility(View.GONE);
+                recyclerView2.setVisibility(View.GONE);
+                recyclerView1.setVisibility(View.GONE);
 
             }
         });
+        Button Before =findViewById(R.id.DayBefore);
+        List<FoodData> sortedList = new ArrayList<>(foodList); // 기존 리스트를 복제하여 새로운 리스트 생성
 
+        Collections.sort(sortedList, new Comparator<FoodData>() {
+            @Override
+            public int compare(FoodData o1, FoodData o2) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy년MM월dd일", Locale.KOREA);
+                try {
+                    // 날짜 문자열을 Date 객체로 변환하여 비교
+                    Date date1 = format.parse(o1.getDate());
+                    Date date2 = format.parse(o2.getDate());
+
+                    // 오름차순으로 정렬
+                    //return date1.compareTo(date2);
+
+                    // 내림차순으로 정렬
+                    return date2.compareTo(date1);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    // 예외 발생 시, 날짜를 비교할 수 없으므로 0을 반환하거나 다른 적절한 처리를 수행할 수 있습니다.
+                    return 0;
+                }
+            }
+        });
+        for(FoodData item:sortedList){
+            Log.e("test compare :",item.getDate());
+        }
+        Before.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button nowDay=findViewById(R.id.DayToday);
+                // item과 비교하여 작은 값 찾기
+                FoodData firstSmallerItem = null;
+                String item=nowDay.getText().toString();
+                for (FoodData data : sortedList) {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy년MM월dd일", Locale.KOREA);
+                    try {
+                        Date date1 = format.parse(data.getDate());
+                        Date date2 = format.parse(item);
+                        Log.d("첫 번째 작은 값", date1.toString()+" "+date2.toString()+" "+date2.compareTo(date1));
+                        if (date1.compareTo(date2) < 0) {
+                            // item보다 작은 경우
+                            firstSmallerItem = data;
+                            break; // 작은 값 찾았으면 반복문 중단
+                        }
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+                if (firstSmallerItem != null) {
+                    Log.d("첫 번째 작은 값", firstSmallerItem.getDate());
+                    nowDay.setText(firstSmallerItem.getDate());
+                } else {
+                    Log.d("작은 값이 없음", "마지막 저장 데이터 입니다");
+                }
+                recyclerView4.setVisibility(View.GONE);
+                recyclerView3.setVisibility(View.GONE);
+                recyclerView2.setVisibility(View.GONE);
+                recyclerView1.setVisibility(View.GONE);
+            }
+        });
+
+    }
+    private void updateslist(List<FoodData> dataList,RecyclerView recyclerView,FoodAnalyzeAdapter adapter){
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            List<FoodData> dataList2 = new ArrayList<>();
+            List<FoodData> dataList1 = new ArrayList<>();
+            dataList2=toDayList(dataList);
+            dataList1=typeList(dataList2,"음료");
+            adapter = new FoodAnalyzeAdapter(DayInfo.this, dataList1);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
     private List<FoodData> typeList(List<FoodData> dataList,String type){
         List<FoodData> dataList1 = new ArrayList<>();
@@ -239,7 +312,7 @@ public class DayInfo extends AppCompatActivity {
         textView_Date = (TextView)findViewById(R.id.DayToday);
     }
 
-    public void InitializeListener()
+    public void InitializeListener(List<FoodData> dataList)
     {
         callbackMethod = new DatePickerDialog.OnDateSetListener()
         {
@@ -248,6 +321,16 @@ public class DayInfo extends AppCompatActivity {
             {
                 int realMonth = monthOfYear + 1;
                 String selectedDate = year + "년" + realMonth + "월" + dayOfMonth + "일";
+                int count=0;
+                for(FoodData item:dataList){
+                    if(selectedDate.equals(item.getDate())){
+                        count++;
+                    }
+                }
+                if(count==0){
+                    Toast.makeText(DayInfo.this, "데이터 없음!", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 textView_Date.setText(selectedDate);
             }
         };
