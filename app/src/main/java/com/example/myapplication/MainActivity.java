@@ -47,5 +47,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button testForinfo=findViewById(R.id.testForInfo);
+        testForinfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(),DayInfo.class);
+                startActivity(intent);
+            }
+        });
     }
 }

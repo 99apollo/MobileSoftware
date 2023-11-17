@@ -64,7 +64,6 @@ public class FoodInput extends AppCompatActivity {
             }
         });
         //날짜 선정
-        TextView textView=findViewById(R.id.date_info);
         Button dateButton=findViewById(R.id.select_date_time_button);
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
