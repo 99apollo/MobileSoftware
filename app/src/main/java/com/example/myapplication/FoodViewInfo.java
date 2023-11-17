@@ -1,11 +1,13 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -14,10 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 
 public class FoodViewInfo extends AppCompatActivity {
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(@Nullable Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         setContentView(R.layout.view_recyclerview_click);
+        int defaultValue=0;
         Intent intent = getIntent();
         String imagePath = intent.getStringExtra("imagePath");
         String food = intent.getStringExtra("food");
@@ -28,6 +32,8 @@ public class FoodViewInfo extends AppCompatActivity {
         String evaluation = intent.getStringExtra("evaluation");
         String cost = intent.getStringExtra("cost");
         String drink=intent.getStringExtra("drink");
+        int cal = intent.getIntExtra("cal", defaultValue);
+
 // 이후 각 TextView에 데이터 설정
         TextView placeTextView = findViewById(R.id.viewPlace);
         TextView foodTextView = findViewById(R.id.food_text);
@@ -38,7 +44,8 @@ public class FoodViewInfo extends AppCompatActivity {
         TextView costTextView = findViewById(R.id.costText);
         TextView drinkTextView=findViewById(R.id.drink_click);
         if(type.equals("음료")){
-            Log.e("typechoose",type.toString());
+            drinkTextView.setText(drink);
+            Log.e("typechoose",type.toString()+drink);
             // 음식과 반찬 입력 레이아웃 숨김
             findViewById(R.id.constraintLayout2).setVisibility(View.GONE);
             // 음료와 음료 입력 레이아웃 표시
@@ -49,7 +56,7 @@ public class FoodViewInfo extends AppCompatActivity {
             // 음식과 반찬 입력 레이아웃 표시
             findViewById(R.id.constraintLayout2).setVisibility(View.VISIBLE);
         }
-        drinkTextView.setText(drink);
+
         placeTextView.setText(place);
         foodTextView.setText(food);
         dateTextView.setText(date);
@@ -62,12 +69,17 @@ public class FoodViewInfo extends AppCompatActivity {
         Glide.with(this).load(imagePath).into(imageView);
 
         Button backButton=findViewById(R.id.backButton);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setProgress(cal);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+
+        TextView textView=findViewById(R.id.cal_setting);
+        textView.setText(cal+"/2000");
     }
 
 }

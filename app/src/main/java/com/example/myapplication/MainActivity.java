@@ -38,5 +38,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button test =findViewById(R.id.ididid);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(),CalendarTest.class);
+                startActivity(intent);
+            }
+        });
     }
 }
