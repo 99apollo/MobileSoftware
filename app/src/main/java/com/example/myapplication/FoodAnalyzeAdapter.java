@@ -18,10 +18,12 @@ import java.util.List;
 public class FoodAnalyzeAdapter extends RecyclerView.Adapter<FoodAnalyzeAdapter.ViewHolder> {
     private Context context;
     private List<FoodData> dataList;
+    private FoodAnalyzeAdapter.OnItemClickListener onItemClickListener; // 클릭 이벤트 리스너
 
-    public FoodAnalyzeAdapter(Context context, List<FoodData> dataList) {
+    public FoodAnalyzeAdapter(Context context, List<FoodData> dataList, FoodAnalyzeAdapter.OnItemClickListener onItemClickListener) {
         this.context = context;
         this.dataList = dataList;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -49,6 +51,16 @@ public class FoodAnalyzeAdapter extends RecyclerView.Adapter<FoodAnalyzeAdapter.
                 .load(foodData.getImagePath())
                 .into(holder.AimageView);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 수정: onItemClickListener를 통해 클릭 이벤트 전달
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(foodData);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -73,5 +85,12 @@ public class FoodAnalyzeAdapter extends RecyclerView.Adapter<FoodAnalyzeAdapter.
             AplaceTextView=itemView.findViewById(R.id.AplaceTextView);
         }
     }
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
+    // 항목 클릭 이벤트 리스너 인터페이스
+    public interface OnItemClickListener {
+        void onItemClick(FoodData foodData);
+    }
 }

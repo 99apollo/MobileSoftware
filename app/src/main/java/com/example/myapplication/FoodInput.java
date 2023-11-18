@@ -174,7 +174,7 @@ public class FoodInput extends AppCompatActivity {
                 // 데이터를 JSON으로 변환
                 FoodData data = new FoodData(imageFile.getAbsolutePath(), foodName, selectedDate,
                         selectedPlace, selectedType, madeTime,
-                        imageFileName, subName, evlText, Integer.parseInt(cost),drink,cal);
+                        imageFileName, subName, evlText, Integer.parseInt(cost),drink,cal,dataSetKey);
                 String dataJson = new Gson().toJson(data);
 
                 // SharedPreferences에 저장

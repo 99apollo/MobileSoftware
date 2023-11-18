@@ -1,12 +1,17 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,7 +38,8 @@ public class FoodViewInfo extends AppCompatActivity {
         String cost = intent.getStringExtra("cost");
         String drink=intent.getStringExtra("drink");
         int cal = intent.getIntExtra("cal", defaultValue);
-
+        String key = intent.getStringExtra("key");
+        Log.e("key : "," ? "+key);
 // 이후 각 TextView에 데이터 설정
         TextView placeTextView = findViewById(R.id.viewPlace);
         TextView foodTextView = findViewById(R.id.food_text);
@@ -80,6 +86,50 @@ public class FoodViewInfo extends AppCompatActivity {
 
         TextView textView=findViewById(R.id.cal_setting);
         textView.setText(cal+"/2000");
+
+        ImageButton imageButton=findViewById(R.id.menu_icon);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDynamicPopupMenu(view,key);
+            }
+        });
+    }
+
+    private void showDynamicPopupMenu(View view,String key) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        ImageButton place=(ImageButton) findViewById(R.id.menu_icon);
+        SharedPreferences sharedPreferences = getSharedPreferences("FoodPreferences", Context.MODE_PRIVATE);
+        popupMenu.getMenuInflater().inflate(R.menu.month_popup,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if(menuItem.getTitle().equals("삭제")){
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove(key);
+                    editor.apply();
+                    finish();
+                    return true;
+                } else if (menuItem.getTitle().equals("수정")) {
+                    int defaultValue=0;
+                    Intent intent = getIntent();
+                    String imagePath = intent.getStringExtra("imagePath");
+                    String food = intent.getStringExtra("food");
+                    String date = intent.getStringExtra("date");
+                    String place = intent.getStringExtra("place");
+                    String type = intent.getStringExtra("type");
+                    String subName = intent.getStringExtra("subName");
+                    String evaluation = intent.getStringExtra("evaluation");
+                    String cost = intent.getStringExtra("cost");
+                    String drink=intent.getStringExtra("drink");
+                    int cal = intent.getIntExtra("cal", defaultValue);
+                    String key = intent.getStringExtra("key");
+                }
+                return true;
+            }
+        });
+
+        popupMenu.show();
     }
 
 }

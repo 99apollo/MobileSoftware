@@ -100,9 +100,19 @@ public class FoodAnalyze extends AppCompatActivity {
         // RecyclerView 초기화
         recyclerView2 = findViewById(R.id.recyclerView2);
         recyclerView2.setLayoutManager(new LinearLayoutManager(this));
-        adapter1 = new FoodAnalyzeAdapter(this, new ArrayList<>());
+        adapter1 = new FoodAnalyzeAdapter(this, new ArrayList<>(), new FoodAnalyzeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodData foodData) {
 
-        adapter2 = new FoodAnalyzeAdapter(this, new ArrayList<>());
+            }
+        });
+
+        adapter2 = new FoodAnalyzeAdapter(this, new ArrayList<>(), new FoodAnalyzeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodData foodData) {
+
+            }
+        });
         //MaterialCalendarView에 사용
         MaterialCalendarView materialCalendarView = findViewById(R.id.customCalendarView);
         materialCalendarView.setSelectedDate(CalendarDay.today());
@@ -123,7 +133,12 @@ public class FoodAnalyze extends AppCompatActivity {
                 String selectedDate = year + "년" + month + "월" + dayOfMonth + "일";
                 Log.e("선택 날짜",selectedDate);
                 List<FoodData> dataList1 = getFoodDataForSelectedDate(selectedDate);
-                adapter2 = new FoodAnalyzeAdapter(FoodAnalyze.this, dataList1);
+                adapter2 = new FoodAnalyzeAdapter(FoodAnalyze.this, dataList1, new FoodAnalyzeAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(FoodData foodData) {
+
+                    }
+                });
                 recyclerView2.setAdapter(adapter2);
             }
         });

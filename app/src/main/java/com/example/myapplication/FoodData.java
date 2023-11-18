@@ -14,9 +14,10 @@ public class FoodData {
     private String drink;
     private int calories;
 
+    private String key;
     public FoodData(String imagePath, String food, String date,
                     String selectedPlace, String selectedType, String selectedDate,
-                    String imageFileName, String subName, String evlText, int cost,String drink, int calories) {
+                    String imageFileName, String subName, String evlText, int cost,String drink, int calories, String key) {
         this.imagePath = imagePath;
         this.food = food;
         this.date = date;
@@ -29,6 +30,7 @@ public class FoodData {
         this.cost = cost;
         this.drink=drink;
         this.calories=calories;
+        this.key=key;
     }
 
     public String getImagePath() {
@@ -76,4 +78,8 @@ public class FoodData {
     }
 
     public int getCalories(){return calories;}
+
+    public String getKey() {
+        return key;
+    }
 }

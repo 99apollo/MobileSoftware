@@ -106,6 +106,7 @@ public class FoodView extends AppCompatActivity {
                 intent.putExtra("cost", cost);
                 intent.putExtra("cal",temp);
                 intent.putExtra("drink",foodData.getDrink());
+                intent.putExtra("key",foodData.getKey());
                 startActivity(intent);
             }
         });
@@ -152,6 +153,7 @@ public class FoodView extends AppCompatActivity {
                         intent.putExtra("cost", cost);
                         intent.putExtra("cal",temp);
                         intent.putExtra("drink",foodData.getDrink());
+                        intent.putExtra("key",foodData.getKey());
                         startActivity(intent);
                     }
                 });
@@ -249,6 +251,7 @@ public class FoodView extends AppCompatActivity {
                 intent.putExtra("cost", cost);
                 intent.putExtra("cal",temp);
                 intent.putExtra("drink",foodData.getDrink());
+                intent.putExtra("key",foodData.getKey());
                 startActivity(intent);
             }
         });
@@ -287,6 +290,7 @@ public class FoodView extends AppCompatActivity {
                 intent.putExtra("cost", cost);
                 intent.putExtra("cal",temp);
                 intent.putExtra("drink",foodData.getDrink());
+                intent.putExtra("key",foodData.getKey());
                 startActivity(intent);
             }
         });

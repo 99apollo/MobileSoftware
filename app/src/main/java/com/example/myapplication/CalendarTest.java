@@ -49,9 +49,7 @@ public class CalendarTest extends AppCompatActivity {
         // RecyclerView 초기화
         recyclerView3 = findViewById(R.id.recyclerView3);
         recyclerView3.setLayoutManager(new LinearLayoutManager(this));
-        adapter1 = new FoodAnalyzeAdapter(this, new ArrayList<>());
         List<CalendarDay> calendarDayList = new ArrayList<>();
-        adapter2 = new FoodAnalyzeAdapter(this, new ArrayList<>());
         //MaterialCalendarView에 사용
         MaterialCalendarView materialCalendarView = findViewById(R.id.customCalendarView1);
         materialCalendarView.setSelectedDate(CalendarDay.today());
@@ -76,7 +74,12 @@ public class CalendarTest extends AppCompatActivity {
                 String selectedDate = year + "년" + month + "월" + dayOfMonth + "일";
                 Log.e("선택 날짜",selectedDate);
                 List<FoodData> dataList1 = getFoodDataForSelectedDate(selectedDate);
-                adapter2 = new FoodAnalyzeAdapter(CalendarTest.this, dataList1);
+                adapter2 = new FoodAnalyzeAdapter(CalendarTest.this, dataList1, new FoodAnalyzeAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(FoodData foodData) {
+
+                    }
+                });
                 recyclerView3.setAdapter(adapter2);
             }
         });
