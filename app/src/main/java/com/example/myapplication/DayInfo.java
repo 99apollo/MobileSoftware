@@ -1,22 +1,13 @@
 package com.example.myapplication;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.format.DateUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
 import java.text.ParseException;
@@ -37,11 +26,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public class DayInfo extends AppCompatActivity {
     private RecyclerView recyclerView1, recyclerView2, recyclerView3, recyclerView4, recyclerView5;
@@ -54,18 +41,27 @@ public class DayInfo extends AppCompatActivity {
     private FoodAnalyzeAdapter adapter1,adapter2,adapter3,adapter4;
     private boolean needToRestartActivity = false;
     private ProgressBar progressBar;
-
+    List<FoodData> foodList=new ArrayList<>();
     @Override
     protected void onResume() {
         super.onResume();
+        foodList=getAllFoodDataFromPreferences();
+        testFun(foodList);
+        for(FoodData item:foodList){
+            Log.e("restart? : ",item.getDate());
+        }
+        recyclerView4.setVisibility(View.GONE);
+        recyclerView3.setVisibility(View.GONE);
+        recyclerView2.setVisibility(View.GONE);
+        recyclerView1.setVisibility(View.GONE);
 
         // 특정 조건을 만족할 때 액티비티를 다시 시작하려면
-        if (needToRestartActivity) {
+        /*if (needToRestartActivity) {
             Button temp=findViewById(R.id.DayToday);
             String item = temp.getText().toString();
             recreate(); // 현재 액티비티를 다시 생성
             temp.setText(item);
-        }
+        }*/
     }
 
     // 예를 들어, 특정 버튼 클릭 시 액티비티를 다시 시작해야 하는 경우
@@ -78,8 +74,8 @@ public class DayInfo extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         setContentView(R.layout.view_test_layout);
-        List<FoodData> foodList=getAllFoodDataFromPreferences();
 
+        foodList=getAllFoodDataFromPreferences();
         // 각 RecyclerView 및 Button을 초기화합니다.
         recyclerView1 = findViewById(R.id.breakfastView);
         recyclerView2 = findViewById(R.id.lunchView);
