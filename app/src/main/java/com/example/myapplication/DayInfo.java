@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,7 @@ public class DayInfo extends AppCompatActivity {
     private static final String PREFERENCES_NAME = "FoodPreferences";
     private FoodAnalyzeAdapter adapter1,adapter2,adapter3,adapter4;
     private boolean needToRestartActivity = false;
+    private ProgressBar progressBar;
 
     @Override
     protected void onResume() {
@@ -59,7 +61,10 @@ public class DayInfo extends AppCompatActivity {
 
         // 특정 조건을 만족할 때 액티비티를 다시 시작하려면
         if (needToRestartActivity) {
+            Button temp=findViewById(R.id.DayToday);
+            String item = temp.getText().toString();
             recreate(); // 현재 액티비티를 다시 생성
+            temp.setText(item);
         }
     }
 
@@ -85,7 +90,11 @@ public class DayInfo extends AppCompatActivity {
         button2 = findViewById(R.id.lunchInfo);
         button3 = findViewById(R.id.dinnerInfo);
         button4 = findViewById(R.id.drinkInfo);
-
+        TextView breakfastCalText=findViewById(R.id.breakfastCal);
+        TextView lunchCalText=findViewById(R.id.lunchCal);
+        TextView dinnerCalText=findViewById(R.id.dinnerCal);
+        TextView drinkCalText=findViewById(R.id.drinkCal);
+        TextView totalCalText=findViewById(R.id.cal_setting_test);
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         recyclerView2.setLayoutManager(new LinearLayoutManager(this));
         recyclerView3.setLayoutManager(new LinearLayoutManager(this));
@@ -103,6 +112,9 @@ public class DayInfo extends AppCompatActivity {
         // 현재 날짜를 지정한 형식으로 변환
         String formattedDate = dateFormat.format(currentDate);
         dayToday.setText(formattedDate);
+
+        List<FoodData> foodList2=toDayList(foodList);
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,7 +220,7 @@ public class DayInfo extends AppCompatActivity {
                 recyclerView3.setVisibility(View.GONE);
                 recyclerView2.setVisibility(View.GONE);
                 recyclerView1.setVisibility(View.GONE);
-
+                testFun(foodList);
             }
         });
 
@@ -276,6 +288,7 @@ public class DayInfo extends AppCompatActivity {
                         if (date1.compareTo(date2) < 0) {
                             // item보다 작은 경우
                             firstSmallerItem = data;
+
                             break; // 작은 값 찾았으면 반복문 중단
                         }
                     } catch (ParseException e) {
@@ -286,6 +299,7 @@ public class DayInfo extends AppCompatActivity {
                 if (firstSmallerItem != null) {
                     Log.d("첫 번째 작은 값", firstSmallerItem.getDate());
                     nowDay.setText(firstSmallerItem.getDate());
+                    testFun(foodList);
                 } else {
                     Log.d("작은 값이 없음", "마지막 저장 데이터 입니다");
                 }
@@ -323,6 +337,7 @@ public class DayInfo extends AppCompatActivity {
                 if (firstSmallerItem != null) {
                     Log.d("첫 번째 작은 값", firstSmallerItem.getDate());
                     nowDay.setText(firstSmallerItem.getDate());
+                    testFun(foodList);
                 } else {
                     Log.d("작은 값이 없음", "마지막 저장 데이터 입니다");
                 }
@@ -397,9 +412,77 @@ public class DayInfo extends AppCompatActivity {
                 TodatList.add(temp);
             }
         }
+        TextView breakfastCalText=findViewById(R.id.breakfastCal);
+        TextView lunchCalText=findViewById(R.id.lunchCal);
+        TextView dinnerCalText=findViewById(R.id.dinnerCal);
+        TextView drinkCalText=findViewById(R.id.drinkCal);
+        TextView totalCalText=findViewById(R.id.cal_setting_test);
+        int totalCal=0;
+        int brekfastCal=0;
+        int lunchCal=0;
+        int dinnerCal=0;
+        int drinkCal=0;
+        for(FoodData entry:TodatList){
+
+            String Type=entry.getSelectedType();
+            // 조식, 중식, 석식, 음료에 해당하는 칼로리 업데이트
+            if (Type.equals("조식")) {
+                brekfastCal+=entry.getCalories();
+            } else if (Type.equals("중식")) {
+                lunchCal+=entry.getCalories();
+            } else if (Type.equals("석식")) {
+                dinnerCal+=entry.getCalories();
+            } else if (Type.equals("음료")) {
+                drinkCal+=entry.getCalories();
+            }
+            totalCal+=entry.getCalories();
+        }
+        breakfastCalText.setText(brekfastCal+"칼로리");
+        lunchCalText.setText(lunchCal+"칼로리");
+        dinnerCalText.setText(dinnerCal+"칼로리");
+        drinkCalText.setText(drinkCal+"칼로리");
+        totalCalText.setText(totalCal+"/2000");
+        progressBar = findViewById(R.id.progressBarTest);
+        progressBar.setProgress(totalCal);
 
         return TodatList;
     }
+    private void testFun(List<FoodData> foodList){
+        List<FoodData> TodatList=toDayList(foodList);
+        TextView breakfastCalText=findViewById(R.id.breakfastCal);
+        TextView lunchCalText=findViewById(R.id.lunchCal);
+        TextView dinnerCalText=findViewById(R.id.dinnerCal);
+        TextView drinkCalText=findViewById(R.id.drinkCal);
+        TextView totalCalText=findViewById(R.id.cal_setting_test);
+        int totalCal=0;
+        int brekfastCal=0;
+        int lunchCal=0;
+        int dinnerCal=0;
+        int drinkCal=0;
+        for(FoodData entry:TodatList){
+
+            String Type=entry.getSelectedType();
+            // 조식, 중식, 석식, 음료에 해당하는 칼로리 업데이트
+            if (Type.equals("조식")) {
+                brekfastCal+=entry.getCalories();
+            } else if (Type.equals("중식")) {
+                lunchCal+=entry.getCalories();
+            } else if (Type.equals("석식")) {
+                dinnerCal+=entry.getCalories();
+            } else if (Type.equals("음료")) {
+                drinkCal+=entry.getCalories();
+            }
+            totalCal+=entry.getCalories();
+        }
+        breakfastCalText.setText(brekfastCal+"칼로리");
+        lunchCalText.setText(lunchCal+"칼로리");
+        dinnerCalText.setText(dinnerCal+"칼로리");
+        drinkCalText.setText(drinkCal+"칼로리");
+        totalCalText.setText(totalCal+"/2000");
+        progressBar = findViewById(R.id.progressBarTest);
+        progressBar.setProgress(totalCal);
+    }
+
     private void showDatePickerDialog() {
         InitializeView(); // textView_Date 초기화
 
@@ -463,36 +546,9 @@ public class DayInfo extends AppCompatActivity {
                     return;
                 }
                 textView_Date.setText(selectedDate);
+                testFun(dataList);
             }
         };
     }
 
-    // RecyclerView를 토글하는 메서드
-    private void toggleRecyclerView(RecyclerView recyclerView) {
-        if (recyclerView.getVisibility() == View.VISIBLE) {
-            fadeOutRecyclerView(recyclerView);
-        } else {
-            fadeInRecyclerView(recyclerView);
-        }
-    }
-    // RecyclerView를 페이드 인하는 메서드
-    private void fadeInRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setVisibility(View.VISIBLE);
-        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(recyclerView, "alpha", 0f, 1f);
-        fadeIn.setDuration(500);
-        fadeIn.start();
-    }
-
-    // RecyclerView를 페이드 아웃하는 메서드
-    private void fadeOutRecyclerView(RecyclerView recyclerView) {
-        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(recyclerView, "alpha", 1f, 0f);
-        fadeOut.setDuration(500);
-        fadeOut.start();
-        fadeOut.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                recyclerView.setVisibility(View.GONE);
-            }
-        });
-    }
 }
