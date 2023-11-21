@@ -4,25 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/dongguk">
+    android:background="@drawable/dongguk"
+    tools:context=".MainActivity">
 
 
     <Button
         android:id="@+id/inputFood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tv_stroke_rect"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:background="@drawable/btest_12"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:text="식사 입력"
-        app:layout_constraintBottom_toBottomOf="@+id/analyzeFood"
-        app:layout_constraintEnd_toEndOf="@+id/analyzeFood"
-        app:layout_constraintHorizontal_bias="0.195"
+        app:layout_constraintBottom_toBottomOf="@+id/ididid"
+        app:layout_constraintEnd_toStartOf="@+id/ididid"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.714" />
+        app:layout_constraintTop_toTopOf="@+id/ididid" />
 
     <Button
         android:id="@+id/viewFood"
@@ -35,10 +33,10 @@
         android:text="식사 보기"
         app:layout_constraintBottom_toBottomOf="@+id/analyzeFood"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.772"
+        app:layout_constraintHorizontal_bias="0.676"
         app:layout_constraintStart_toStartOf="@+id/analyzeFood"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.714"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -52,26 +50,34 @@
         android:text="식사 분석"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintHorizontal_bias="0.294"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.748" />
+        app:layout_constraintVertical_bias="0.751"
+
+        />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="adf"
         android:id="@+id/ididid"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:background="@drawable/atest_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.902" />
 
     <Button
         android:id="@+id/testForInfo"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:background="@drawable/ctest_12"
         android:text="test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/ididid"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/ididid"
+        app:layout_constraintTop_toTopOf="@+id/ididid" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
