@@ -22,22 +22,22 @@
 
         <Button
             android:id="@+id/DayBefore"
-            android:layout_marginStart="10sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="before" />
+            android:layout_width="42dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="5sp"
+            android:text="-" />
 
         <Button
             android:id="@+id/DayToday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:text="ToDay" />
 
         <Button
             android:id="@+id/NextDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="next" />
+            android:layout_width="42dp"
+            android:layout_height="38dp"
+            android:text="+" />
 
     </LinearLayout>
 

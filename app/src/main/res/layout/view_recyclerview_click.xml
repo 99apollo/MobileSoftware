@@ -14,12 +14,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/menu_icon"
             android:layout_width="52dp"
             android:layout_height="49dp"
-            android:src="@drawable/test"
-            android:id="@+id/menu_icon"
-            android:text="메뉴"
             android:background="@color/white"
+            android:src="@drawable/test"
+            android:text="메뉴"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,10 +37,10 @@
         app:layout_constraintVertical_bias="0.07">
 
         <TextView
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="장소 : "
-            style="@style/AppTextView"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/viewPlace"
@@ -51,10 +51,10 @@
 
         <TextView
             android:id="@+id/viewPlace"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="장소 선택"
-            style="@style/AppTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.569"
@@ -73,16 +73,15 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintVertical_bias="0.043"
-        >
+        app:layout_constraintVertical_bias="0.043">
 
         <TextView
             android:id="@+id/textView"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="음식 : "
-            style="@style/AppTextView"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,22 +89,22 @@
 
         <TextView
             android:id="@+id/food_text"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:hint="음식 입력"
-            style="@style/AppTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView2"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="72dp"
             android:text="반찬 : "
-            style="@style/AppTextView"
             android:textSize="17sp"
 
             app:layout_constraintBottom_toBottomOf="parent"
@@ -114,11 +113,11 @@
 
         <TextView
             android:id="@+id/sub_text"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:hint="반찬 입력"
-            style="@style/AppTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -139,11 +138,11 @@
 
         <TextView
             android:id="@+id/textView1"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="음료 : "
-            style="@style/AppTextView"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -151,11 +150,11 @@
 
         <TextView
             android:id="@+id/drink_click"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="음료 입력"
-            style="@style/AppTextView"
             app:layout_constraintStart_toEndOf="@+id/textView1"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -172,10 +171,10 @@
 
         <TextView
             android:id="@+id/textView3"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="음식 이미지"
-            style="@style/AppTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.195"
@@ -195,11 +194,11 @@
 
         <TextView
             android:id="@+id/typeText"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="44dp"
             android:text="종류"
-            style="@style/AppTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.487"
@@ -218,11 +217,11 @@
 
         <TextView
             android:id="@+id/textView4"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:text="평가 : "
-            style="@style/AppTextView"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -230,16 +229,16 @@
 
         <TextView
             android:id="@+id/evaluationText"
-            android:layout_width="308dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="10dp"
             style="@style/AppTextView"
+            android:layout_width="276dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.163"
             app:layout_constraintStart_toEndOf="@+id/textView4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.496" />
+            app:layout_constraintVertical_bias="0.505" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -266,11 +265,11 @@
 
         <TextView
             android:id="@+id/textView5"
+            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:text="비용 : "
-            style="@style/AppTextView"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -279,11 +278,11 @@
 
         <TextView
             android:id="@+id/costText"
+            style="@style/AppTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:hint="비용 입력"
-            style="@style/AppTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -296,52 +295,53 @@
 
     <TextView
         android:id="@+id/textView7"
+        style="@style/AppTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="칼로리"
-        style="@style/AppTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="309dp"
-        android:layout_height="17dp"
+        android:layout_width="221dp"
+        android:layout_height="20dp"
         android:layout_centerVertical="true"
-        android:layout_marginTop="8dp"
         android:max="2000"
         android:progress="300"
         android:progressTint="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
+        app:layout_constraintBottom_toBottomOf="@+id/cal_setting"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.843"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintHorizontal_bias="0.474"
+        app:layout_constraintStart_toEndOf="@+id/cal_setting"
+        app:layout_constraintTop_toTopOf="@+id/cal_setting"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/cal_setting"
+        style="@style/AppTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="칼로리"
-        style="@style/AppTextView"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-        app:layout_constraintEnd_toStartOf="@+id/progressBar"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.109"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/progressBar" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintVertical_bias="0.312" />
 
     <Button
         android:id="@+id/backButton"
+        style="@style/AppButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="뒤로가기"
 
-        style="@style/AppButton"
+        android:text="뒤로가기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -349,11 +349,11 @@
 
     <TextView
         android:id="@+id/date_info"
+        style="@style/AppTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="날짜를 골라주세요"
         android:textSize="20sp"
-        style="@style/AppTextView"
         app:layout_constraintBottom_toTopOf="@+id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

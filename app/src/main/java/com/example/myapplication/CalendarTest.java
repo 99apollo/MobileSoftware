@@ -128,7 +128,7 @@ public class CalendarTest extends AppCompatActivity {
             if (!entry.getKey().startsWith("data_set_")) {
                 continue;
             }
-            Log.e("시발 : ",foodDataJson+" key "+entry.getKey());
+            Log.e("test : ",foodDataJson+" key "+entry.getKey());
             FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
             foodDataList.add(foodData);
         }

@@ -26,7 +26,64 @@ public class FoodView extends AppCompatActivity {
     private FoodDataAdapter adapter;
     private SharedPreferences sharedPreferences;
     private static final String PREFERENCES_NAME = "FoodPreferences";
+    private boolean needToRestartActivity = false;
+    protected void onResume() {
+        super.onResume();
+        // 데이터를 저장하고 있는 dataList을 초기화
+        List<FoodData> dataList = new ArrayList<>();
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        int dataSetCount = sharedPreferences.getInt("dataSetCount", 0);
 
+        for (int i = 0; i < dataSetCount; i++) {
+            String dataSetKey = "data_set_" + i;
+            String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
+            if (!dataJson.isEmpty()) {
+                // JSON 데이터를 FoodData 객체로 파싱
+                FoodData data = new Gson().fromJson(dataJson, FoodData.class);
+                dataList.add(data);
+                Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
+            }
+
+
+        }
+        adapter = new FoodDataAdapter(this, dataList, new FoodDataAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodData foodData) {
+                Intent intent = new Intent(getApplicationContext(),FoodViewInfo.class);
+                intent.putExtra("imagePath", foodData.getImagePath());
+                int temp=foodData.getCalories();
+                Log.e("next item",Integer.toString(temp));
+                String cost=String.valueOf(foodData.getCost());
+                intent.putExtra("food", foodData.getFood());
+                intent.putExtra("date", foodData.getSelectedDate());
+                intent.putExtra("place", foodData.getSelectedPlace());
+                intent.putExtra("type", foodData.getSelectedType());
+                intent.putExtra("subName", foodData.getSubName());
+                intent.putExtra("evaluation", foodData.getEvlText());
+                intent.putExtra("cost", cost);
+                intent.putExtra("cal",temp);
+                intent.putExtra("drink",foodData.getDrink());
+                intent.putExtra("key",foodData.getKey());
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 알림
+
+        // 특정 조건을 만족할 때 액티비티를 다시 시작하려면
+        /*if (needToRestartActivity) {
+            Button temp=findViewById(R.id.DayToday);
+            String item = temp.getText().toString();
+            recreate(); // 현재 액티비티를 다시 생성
+            temp.setText(item);
+        }*/
+    }
+    private void onSomeButtonClick() {
+        // 필요한 작업 수행
+
+        // 액티비티를 다시 시작해야 하는 조건이 충족되면
+        needToRestartActivity = true;
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
