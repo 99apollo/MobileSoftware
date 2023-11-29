@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -123,14 +124,21 @@ public class CalendarTest extends AppCompatActivity {
         List<FoodData> foodDataList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
+
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             String foodDataJson = entry.getValue().toString();
             if (!entry.getKey().startsWith("data_set_")) {
                 continue;
             }
-            Log.e("test : ",foodDataJson+" key "+entry.getKey());
-            FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
-            foodDataList.add(foodData);
+            Log.e("test : ", foodDataJson + " key " + entry.getKey());
+
+            try {
+                FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
+                foodDataList.add(foodData);
+            } catch (JsonSyntaxException e) {
+                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
+            }
         }
 
         return foodDataList;
@@ -145,11 +153,19 @@ public class CalendarTest extends AppCompatActivity {
 
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             String foodDataJson = entry.getValue().toString();
-            if (entry.getKey().startsWith("data_set_")) {
+            if (!entry.getKey().startsWith("data_set_")) {
+                continue;
+            }
+            Log.e("test : ", foodDataJson + " key " + entry.getKey());
+
+            try {
                 FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
                 if (foodData.getDate().equals(selectedDate)) {
                     foodDataList.add(foodData);
                 }
+            } catch (JsonSyntaxException e) {
+                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
             }
         }
 

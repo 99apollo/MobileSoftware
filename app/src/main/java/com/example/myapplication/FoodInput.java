@@ -24,18 +24,34 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class FoodInput extends AppCompatActivity {
 
@@ -56,6 +72,8 @@ public class FoodInput extends AppCompatActivity {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.food_input_layout);
         Button place=(Button) findViewById(R.id.choose_place);
+
+        List<FoodData> dataLis11=getAllFoodDataFromPreferences();
         //장소 선정
         place.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +112,7 @@ public class FoodInput extends AppCompatActivity {
         });
 
         imageView = findViewById(R.id.imageView);
+
         Button pickImageButton = findViewById(R.id.pickImageButton);
 
         pickImageButton.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +164,7 @@ public class FoodInput extends AppCompatActivity {
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                     outputStream.close();
 
-                    // 이미지 파일의 경로를 SharedPreferences에 저장
-                    editor.putString(dataSetKey, imageFile.getAbsolutePath());
-                    editor.apply();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -170,28 +187,67 @@ public class FoodInput extends AppCompatActivity {
                 //음료 입력
                 EditText drinkInput= findViewById(R.id.drink_input);
                 String drink=drinkInput.getText().toString();
-                int cal=calories(foodName,subName,drink);
+                int cal=calories(foodName,subName,drink,FoodInput.this);
+                // 입력 값 검증
+                Bitmap imageBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                if (imageBitmap == null) {
+                    Toast.makeText(FoodInput.this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (evlText.isEmpty()) {
+                    Toast.makeText(FoodInput.this, "평가를 입력하세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                try {
+                    // 가격이 정수가 아닌 경우 NumberFormatException이 발생할 수 있음
+                    Integer.parseInt(cost);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(FoodInput.this, "가격은 정수로 입력하세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // 데이터를 JSON으로 변환
                 FoodData data = new FoodData(imageFile.getAbsolutePath(), foodName, selectedDate,
                         selectedPlace, selectedType, madeTime,
-                        imageFileName, subName, evlText, Integer.parseInt(cost),drink,cal,dataSetKey);
+                        imageFileName, subName, evlText, Integer.parseInt(cost),drink,cal, dataSetKey);
                 String dataJson = new Gson().toJson(data);
 
                 // SharedPreferences에 저장
                 editor.putString(dataSetKey, dataJson);
                 editor.apply();
-                // 이전 페이지가 FoodView.class에 해당하는 경우에만 업데이트 실행
-                if (getCallingActivity() != null && getCallingActivity().getClassName().equals("com.example.myapplication.FoodView")) {
-                    Intent intent = new Intent(getApplicationContext(), FoodView.class);
-                    // 필요한 경우에 데이터를 intent에 추가
-                    // intent.putExtra("key", value);
-                    startActivity(intent);
-                }
                 finish();
             }
 
         });
     }
+    public List<FoodData> getAllFoodDataFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+        List<FoodData> foodDataList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String foodDataJson = entry.getValue().toString();
+            if (!entry.getKey().startsWith("data_set_")) {
+                continue;
+            }
+            Log.e("test : ", foodDataJson + " key " + entry.getKey());
+
+            try {
+                FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
+                foodDataList.add(foodData);
+            } catch (JsonSyntaxException e) {
+                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
+            }
+        }
+
+        return foodDataList;
+    }
+
     //날짜 선택 관련 항목 코드
     public void InitializeView()
     {
@@ -316,26 +372,116 @@ public class FoodInput extends AppCompatActivity {
         }
     }
 //현재 칼로리 데이터 없으므로 임으로 고정 500,100,200 으로
-    public int calories(String food, String sub,String drink){
+    public int calories(String food, String sub,String drink,Context context){
         int totalCalories = 0;
-        // 음식 칼로리: 500 * 음식의 길이
+        List<FoodItem> foodItems = readExcelFile(context);
+        Random random = new Random();
+        // 음식 칼로리: 해당 음식의 칼로리 값
         if (food != null && !food.isEmpty()) {
-            int foodCalories = 500;
+            int foodCalories = getCaloriesByName(foodItems, "음식", food);
+            if(foodCalories==0){
+                foodCalories=random.nextInt(401) + 100;
+            }
             totalCalories += foodCalories;
         }
 
-        // 반찬 칼로리: 100 * 반찬의 길이
+        // 반찬 칼로리: 해당 반찬의 칼로리 값
         if (sub != null && !sub.isEmpty()) {
-            int subCalories = 100;
+            int subCalories = getCaloriesByName(foodItems, "반찬", sub);
+            if(subCalories==0){
+                subCalories=random.nextInt(151) + 50;
+            }
             totalCalories += subCalories;
         }
 
-        // 음료 칼로리: 200 * 음료의 길이
+        // 음료 칼로리: 해당 음료의 칼로리 값
         if (drink != null && !drink.isEmpty()) {
-            int drinkCalories = 200;
+            int drinkCalories = getCaloriesByName(foodItems, "음료", drink);
+            if(drinkCalories==0){
+                drinkCalories=random.nextInt(301) + 50;
+            }
             totalCalories += drinkCalories;
         }
 
         return totalCalories;
+    }
+    private int getCaloriesByName(List<FoodItem> foodItems, String type, String name) {
+        for (FoodItem item : foodItems) {
+            if (item.getName().equals(name)) {
+                return item.getCalories();
+            }
+        }
+        return 0; // 찾지 못한 경우 기본값으로 0을 반환하거나 다른 방식으로 처리
+    }
+
+    private List<FoodItem> readExcelFile(Context context) {
+        List<FoodItem> foodItems = new ArrayList<>();
+
+        try (InputStream inputStream = context.getAssets().open("localdata.xls");
+             Workbook workbook = WorkbookFactory.create(inputStream)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // 첫 번째 시트를 읽어옴
+
+            Iterator<Row> rowIterator = sheet.rowIterator();
+
+            // 첫 번째 행은 헤더이므로 넘어감
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+
+                // 각 행에서 셀 값을 읽어옴
+                Cell typeCell = row.getCell(0);
+                Cell nameCell = row.getCell(1);
+                Cell caloriesCell = row.getCell(2);
+
+                String type = typeCell.getStringCellValue();
+                String name = nameCell.getStringCellValue();
+
+                int calories;
+                if (caloriesCell.getCellType() == CellType.NUMERIC) {
+                    calories = (int) caloriesCell.getNumericCellValue();
+                } else {
+                    // Handle the case when the cell contains a string value
+                    // You may need to parse the string to get the numeric value
+                    // For simplicity, you can set a default value or handle it according to your requirements
+                    calories = 0; // Set a default value or handle it accordingly
+                }
+
+                FoodItem foodItem = new FoodItem(type, name, calories);
+                foodItems.add(foodItem);
+            }
+
+        } catch (IOException | EncryptedDocumentException ex) {
+            ex.printStackTrace();
+        }
+
+        return foodItems;
+    }
+
+    private static class FoodItem {
+        private final String type;
+        private final String name;
+        private final int calories;
+
+        public FoodItem(String type, String name, int calories) {
+            this.type = type;
+            this.name = name;
+            this.calories = calories;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getCalories() {
+            return calories;
+        }
     }
 }

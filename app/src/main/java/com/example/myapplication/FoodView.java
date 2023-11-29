@@ -16,8 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,22 +33,8 @@ public class FoodView extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // 데이터를 저장하고 있는 dataList을 초기화
-        List<FoodData> dataList = new ArrayList<>();
-        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        int dataSetCount = sharedPreferences.getInt("dataSetCount", 0);
+        List<FoodData> dataList = getAllFoodDataFromPreferences();
 
-        for (int i = 0; i < dataSetCount; i++) {
-            String dataSetKey = "data_set_" + i;
-            String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
-            if (!dataJson.isEmpty()) {
-                // JSON 데이터를 FoodData 객체로 파싱
-                FoodData data = new Gson().fromJson(dataJson, FoodData.class);
-                dataList.add(data);
-                Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
-            }
-
-
-        }
         adapter = new FoodDataAdapter(this, dataList, new FoodDataAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(FoodData foodData) {
@@ -83,6 +72,31 @@ public class FoodView extends AppCompatActivity {
 
         // 액티비티를 다시 시작해야 하는 조건이 충족되면
         needToRestartActivity = true;
+    }
+    public List<FoodData> getAllFoodDataFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+        List<FoodData> foodDataList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String foodDataJson = entry.getValue().toString();
+            if (!entry.getKey().startsWith("data_set_")) {
+                continue;
+            }
+            Log.e("test : ", foodDataJson + " key " + entry.getKey());
+
+            try {
+                FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
+                foodDataList.add(foodData);
+            } catch (JsonSyntaxException e) {
+                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
+            }
+        }
+
+        return foodDataList;
     }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,20 +143,7 @@ public class FoodView extends AppCompatActivity {
         int dataSetCount = sharedPreferences.getInt("dataSetCount", 0);
 
         // 데이터를 저장하고 있는 dataList을 초기화
-        List<FoodData> dataList = new ArrayList<>();
-
-        for (int i = 0; i < dataSetCount; i++) {
-            String dataSetKey = "data_set_" + i;
-            String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
-            if (!dataJson.isEmpty()) {
-                // JSON 데이터를 FoodData 객체로 파싱
-                FoodData data = new Gson().fromJson(dataJson, FoodData.class);
-                dataList.add(data);
-                Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
-            }
-
-
-        }
+        List<FoodData> dataList = getAllFoodDataFromPreferences();
 
 
         // FoodDataAdapter를 초기화하고 RecyclerView에 설정
@@ -177,17 +178,9 @@ public class FoodView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 데이터를 저장하고 있는 dataList을 초기화
-                List<FoodData> dataList = new ArrayList<>();
+                List<FoodData> dataList = getAllFoodDataFromPreferences();
 
-                for (int i = 0; i < dataSetCount; i++) {
-                    String dataSetKey = "data_set_" + i;
-                    String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
-                    if (!dataJson.isEmpty()) {
-                        // JSON 데이터를 FoodData 객체로 파싱
-                        FoodData data = new Gson().fromJson(dataJson, FoodData.class);
-                        dataList.add(data);
-                    }
-                }
+
                 Log.e("test",dataList.toString());
 
                 breakfast.setText("장소");

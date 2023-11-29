@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -193,21 +194,27 @@ public class FoodAnalyze extends AppCompatActivity {
                 continue;
             }
             Log.e("시발 : ",foodDataJson+" key "+entry.getKey());
-            FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
-            foodDataList.add(foodData);
-            String selectedDateStr = foodData.getSelectedDate(); // "2023년11월8일12시35분"와 같은 형식
-            Calendar selectedTime = parseSelectedDate(selectedDateStr);
-            // 현재 시간과 선택한 시간의 차이를 일로 계산
-            String test= String.valueOf(currentTime.getTimeInMillis());
+            try {
+                FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
+                foodDataList.add(foodData);
+                String selectedDateStr = foodData.getSelectedDate(); // "2023년11월8일12시35분"와 같은 형식
+                Calendar selectedTime = parseSelectedDate(selectedDateStr);
+                // 현재 시간과 선택한 시간의 차이를 일로 계산
+                String test= String.valueOf(currentTime.getTimeInMillis());
 
-            long diffMillis = currentTime.getTimeInMillis() - selectedTime.getTimeInMillis();
-            int diffDays = (int) (diffMillis / (1000 * 60 * 60 * 24));
+                long diffMillis = currentTime.getTimeInMillis() - selectedTime.getTimeInMillis();
+                int diffDays = (int) (diffMillis / (1000 * 60 * 60 * 24));
 
-            Log.e("시간 비교",String.valueOf(selectedTime.getTimeInMillis())+"  "+test+" "+diffDays);
-            // 30일 이내인 경우만 추가
-            if (diffDays <= 30) {
-                foodDatabefore30.add(foodData);
+                Log.e("시간 비교",String.valueOf(selectedTime.getTimeInMillis())+"  "+test+" "+diffDays);
+                // 30일 이내인 경우만 추가
+                if (diffDays <= 30) {
+                    foodDatabefore30.add(foodData);
+                }
+            } catch (JsonSyntaxException e) {
+                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
             }
+
         }
 
         return foodDatabefore30;
@@ -235,11 +242,19 @@ public class FoodAnalyze extends AppCompatActivity {
 
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             String foodDataJson = entry.getValue().toString();
-            if (entry.getKey().startsWith("data_set_")) {
+            if (!entry.getKey().startsWith("data_set_")) {
+                continue;
+            }
+            Log.e("test : ", foodDataJson + " key " + entry.getKey());
+
+            try {
                 FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
                 if (foodData.getDate().equals(selectedDate)) {
                     foodDataList.add(foodData);
                 }
+            } catch (JsonSyntaxException e) {
+                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
             }
         }
 

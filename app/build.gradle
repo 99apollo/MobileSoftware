@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.myapplication"
-        minSdk 21
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -43,7 +43,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-
+    // Excel
+    implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
+    implementation 'org.apache.poi:poi:5.1.0'
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
 }
