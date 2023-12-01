@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,10 +8,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -29,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -44,7 +42,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,8 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class FoodInput extends AppCompatActivity {
-
+public class FoodViewChange extends AppCompatActivity {
     private static final int GALLERY_REQUEST = 1;
     private static final int CAMERA_REQUEST = 2;
     private TextView textView_Date;
@@ -67,65 +63,90 @@ public class FoodInput extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private static final String PREFERENCES_NAME = "FoodPreferences";
-    @Override
     protected void onCreate(@Nullable Bundle saveInstanceState) {
+
         super.onCreate(saveInstanceState);
         setContentView(R.layout.food_input_layout);
-        Button place=(Button) findViewById(R.id.choose_place);
+        int defaultValue=0;
+        Button placebutton=(Button) findViewById(R.id.choose_place);
 
-        List<FoodData> dataLis11=getAllFoodDataFromPreferences();
-        //장소 선정
-        place.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDynamicPopupMenu(view);
-            }
-        });
-        //날짜 선정
         Button dateButton=findViewById(R.id.select_date_time_button);
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InitializeView();
-                InitializeListener();
-                DatePickerDialog dialog = new DatePickerDialog(FoodInput.this, callbackMethod, 2023, 10, 12);
-
-                dialog.show();
-
-            }
-        });
-        Button timeButton = findViewById(R.id.time_info); // 시간 선택
-        timeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimePickerDialog(timeButton);
-            }
-        });
-
-        //종류
-        Button typeButton=(Button) findViewById(R.id.typeChoose);
-        typeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTypePopupMenu(view);
-            }
-        });
-
         imageView = findViewById(R.id.imageView);
-
         Button pickImageButton = findViewById(R.id.pickImageButton);
-
+        Button typeButton=(Button) findViewById(R.id.typeChoose);
+        // 저장 버튼
+        Button saveButton = findViewById(R.id.save_button);
+        Intent intent = getIntent();
+        String imagePath = intent.getStringExtra("imagePath");
+        String food = intent.getStringExtra("food");
+        String date = intent.getStringExtra("date");
+        String place = intent.getStringExtra("place");
+        String type = intent.getStringExtra("type");
+        String subName = intent.getStringExtra("subName");
+        String evaluation = intent.getStringExtra("evaluation");
+        String cost = intent.getStringExtra("cost");
+        String drink=intent.getStringExtra("drink");
+        int cal = intent.getIntExtra("cal", defaultValue);
+        String key = intent.getStringExtra("key");
+        String[] dateTimeParts = splitDateTime(date);
+        if(type.equals("음료")){
+            Log.e("typechoose",type);
+            // 음식과 반찬 입력 레이아웃 숨김
+            findViewById(R.id.constraintLayout2).setVisibility(View.GONE);
+            // 음료와 음료 입력 레이아웃 표시
+            findViewById(R.id.beverageLayout).setVisibility(View.VISIBLE);
+        }else {
+            // 다른 종류가 선택된 경우, 음료와 음료 입력 레이아웃 숨김
+            findViewById(R.id.beverageLayout).setVisibility(View.GONE);
+            // 음식과 반찬 입력 레이아웃 표시
+            findViewById(R.id.constraintLayout2).setVisibility(View.VISIBLE);
+        }
+        placebutton.setText(place);
+        dateButton.setText(date);
+        // 음식 입력
+        EditText foodInput = findViewById(R.id.food_input);
+        foodInput.setText(food);
+        // 반찬 입력
+        EditText subInput = findViewById(R.id.sub_input);
+        subInput.setText(subName);
+        // 평가 입력
+        EditText evlInput = findViewById(R.id.evaluation);
+        evlInput.setText(evaluation);
+        // 가격 입력
+        EditText costInput = findViewById(R.id.cost);
+        costInput.setText(cost);
+        //음료 입력
+        EditText drinkInput= findViewById(R.id.drink_input);
+        drinkInput.setText(drink);
+        Glide.with(this)
+                .load(imagePath)
+                .into(imageView);
         pickImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showImageSourceOptions();
             }
         });
+        dateButton.setText(dateTimeParts[0]);
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InitializeView();
+                InitializeListener();
+                DatePickerDialog dialog = new DatePickerDialog(FoodViewChange.this, callbackMethod, 2023, 10, 12);
 
+                dialog.show();
 
-
-        // 저장 버튼
-        Button saveButton = findViewById(R.id.save_button);
+            }
+        });
+        Button timeButton = findViewById(R.id.time_info); // 시간 선택
+        timeButton.setText(dateTimeParts[1]);
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimePickerDialog(timeButton);
+            }
+        });
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,11 +155,10 @@ public class FoodInput extends AppCompatActivity {
                 // 데이터 세트의 현재 개수를 가져옴, 만약 값이 없으면 0으로 초기화
                 int dataSetCount = sharedPreferences.getInt("dataSetCount", 0);
                 // 새로운 데이터 세트 키를 생성
-                String dataSetKey = "data_set_" + dataSetCount;
+                String dataSetKey = key;
                 // 장소, 종류, 날짜 값을 가져와서 저장
-                String selectedPlace = (String) place.getText(); // 선택된 장소 값
+                String selectedPlace = (String) placebutton.getText(); // 선택된 장소 값
                 String selectedType = (String) typeButton.getText(); // 선택된 종류 값
-
                 Button date = findViewById(R.id.select_date_time_button);
                 Button time=findViewById(R.id.time_info);
                 String selectedDate = date.getText().toString(); // 선택된 날짜 값
@@ -151,7 +171,7 @@ public class FoodInput extends AppCompatActivity {
                     storageDir.mkdirs();
                 }
                 // 이미지 파일의 이름 생성 (고유한 이름을 생성하는 것이 좋음)
-                String imageFileName = selectedPlace + selectedDate + selectedType+dataSetCount+".jpg";
+                String imageFileName = selectedPlace + selectedDate +System.currentTimeMillis()+ selectedType+dataSetCount+".jpg";
                 // 이미지 파일을 저장할 경로 생성
                 File imageFile = new File(storageDir, imageFileName);
                 // 이미지를 저장
@@ -169,10 +189,6 @@ public class FoodInput extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                // 데이터 세트의 현재 개수를 1 증가시킴
-                dataSetCount++;
-                editor.putInt("dataSetCount", dataSetCount);
-                editor.apply();
                 // 음식 입력
                 //음료 입력
                 // 반찬 입력
@@ -199,16 +215,16 @@ public class FoodInput extends AppCompatActivity {
                 EditText costInput = findViewById(R.id.cost);
                 String cost = costInput.getText().toString();
 
-                int cal=calories(foodName,subName,drink,FoodInput.this);
+                int cal=calories(foodName,subName,drink,FoodViewChange.this);
                 // 입력 값 검증
                 Bitmap imageBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                 if (imageBitmap == null) {
-                    Toast.makeText(FoodInput.this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoodViewChange.this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (evlText.isEmpty()) {
-                    Toast.makeText(FoodInput.this, "평가를 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoodViewChange.this, "평가를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -216,7 +232,7 @@ public class FoodInput extends AppCompatActivity {
                     // 가격이 정수가 아닌 경우 NumberFormatException이 발생할 수 있음
                     Integer.parseInt(cost);
                 } catch (NumberFormatException e) {
-                    Toast.makeText(FoodInput.this, "가격은 정수로 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoodViewChange.this, "가격은 정수로 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -233,31 +249,6 @@ public class FoodInput extends AppCompatActivity {
             }
 
         });
-    }
-    public List<FoodData> getAllFoodDataFromPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-        List<FoodData> foodDataList = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String foodDataJson = entry.getValue().toString();
-            if (!entry.getKey().startsWith("data_set_")) {
-                continue;
-            }
-            Log.e("test : ", foodDataJson + " key " + entry.getKey());
-
-            try {
-                FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
-                foodDataList.add(foodData);
-            } catch (JsonSyntaxException e) {
-                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
-                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
-            }
-        }
-
-        return foodDataList;
     }
 
     //날짜 선택 관련 항목 코드
@@ -383,12 +374,19 @@ public class FoodInput extends AppCompatActivity {
             }
         }
     }
-//현재 칼로리 데이터 없으므로 임으로 고정 500,100,200 으로
-    public int calories(String food, String sub,String drink,Context context){
+    //현재 칼로리 데이터 없으므로 임으로 고정 500,100,200 으로
+    public int calories(String food, String sub, String drink, Context context){
         int totalCalories = 0;
         List<FoodItem> foodItems = readExcelFile(context);
         Random random = new Random();
         // 음식 칼로리: 해당 음식의 칼로리 값
+        Intent intent = getIntent();
+        int defaultValue=0;
+        int cal = intent.getIntExtra("cal", defaultValue);
+        String foodtemp = intent.getStringExtra("food");
+        if(foodtemp.equals(food)){
+            return cal;
+        }
         if (food != null && !food.isEmpty()) {
             int foodCalories = getCaloriesByName(foodItems, "음식", food);
             if(foodCalories==0){
@@ -414,7 +412,6 @@ public class FoodInput extends AppCompatActivity {
             }
             totalCalories += drinkCalories;
         }
-
         return totalCalories;
     }
     private int getCaloriesByName(List<FoodItem> foodItems, String type, String name) {
@@ -495,5 +492,24 @@ public class FoodInput extends AppCompatActivity {
         public int getCalories() {
             return calories;
         }
+    }
+    private static String[] splitDateTime(String dateTimeString) {
+        // 년월일과 시분을 나누는 기준 위치 찾기
+        int timeIndex = dateTimeString.indexOf("일");
+
+        // 기준 위치를 찾을 수 없거나 형식이 맞지 않으면 null 반환
+        if (timeIndex == -1 || timeIndex + 1 >= dateTimeString.length()) {
+            return null;
+        }
+
+        // "년월일"과 "시분" 부분 추출
+        String datePart = dateTimeString.substring(0, timeIndex + 1);
+        String timePart = dateTimeString.substring(timeIndex + 1);
+
+        // 공백 및 쉼표 제거
+        datePart = datePart.replaceAll("[\\s,]+", "");
+        timePart = timePart.replaceAll("[\\s,]+", "");
+
+        return new String[]{datePart, timePart};
     }
 }

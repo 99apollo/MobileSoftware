@@ -109,7 +109,6 @@ public class FoodView extends AppCompatActivity {
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), FoodInput.class);
                 startActivity(intent);
             }
@@ -118,7 +117,6 @@ public class FoodView extends AppCompatActivity {
         analyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), FoodAnalyze.class);
                 startActivity(intent);
             }

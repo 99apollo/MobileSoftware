@@ -28,6 +28,7 @@
         <activity android:name=".FoodViewInfo"/>
         <activity android:name=".CalendarTest"/>
         <activity android:name=".DayInfo"/>
+        <activity android:name=".FoodViewChange"/>
     </application>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

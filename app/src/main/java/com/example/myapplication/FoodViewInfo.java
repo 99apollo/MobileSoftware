@@ -97,6 +97,19 @@ public class FoodViewInfo extends AppCompatActivity {
     }
 
     private void showDynamicPopupMenu(View view,String key) {
+        int defaultValue=0;
+        Intent intent = getIntent();
+        String imagePath = intent.getStringExtra("imagePath");
+        String food = intent.getStringExtra("food");
+        String date = intent.getStringExtra("date");
+        String place1 = intent.getStringExtra("place");
+        String type = intent.getStringExtra("type");
+        String subName = intent.getStringExtra("subName");
+        String evaluation = intent.getStringExtra("evaluation");
+        String cost = intent.getStringExtra("cost");
+        String drink=intent.getStringExtra("drink");
+        int cal = intent.getIntExtra("cal", defaultValue);
+        String key1 = intent.getStringExtra("key");
         PopupMenu popupMenu = new PopupMenu(this, view);
         ImageButton place=(ImageButton) findViewById(R.id.menu_icon);
         SharedPreferences sharedPreferences = getSharedPreferences("FoodPreferences", Context.MODE_PRIVATE);
@@ -111,19 +124,23 @@ public class FoodViewInfo extends AppCompatActivity {
                     finish();
                     return true;
                 } else if (menuItem.getTitle().equals("수정")) {
-                    int defaultValue=0;
-                    Intent intent = getIntent();
-                    String imagePath = intent.getStringExtra("imagePath");
-                    String food = intent.getStringExtra("food");
-                    String date = intent.getStringExtra("date");
-                    String place = intent.getStringExtra("place");
-                    String type = intent.getStringExtra("type");
-                    String subName = intent.getStringExtra("subName");
-                    String evaluation = intent.getStringExtra("evaluation");
-                    String cost = intent.getStringExtra("cost");
-                    String drink=intent.getStringExtra("drink");
-                    int cal = intent.getIntExtra("cal", defaultValue);
-                    String key = intent.getStringExtra("key");
+                    Intent intent = new Intent(getApplicationContext(),FoodViewChange.class);
+                    intent.putExtra("imagePath", imagePath);
+                    int temp=cal;
+                    Log.e("next item",Integer.toString(temp));
+                    String cost1=cost;
+                    intent.putExtra("food", food);
+                    intent.putExtra("date", date);
+                    intent.putExtra("place", place1);
+                    intent.putExtra("type", type);
+                    intent.putExtra("subName", subName);
+                    intent.putExtra("evaluation",evaluation);
+                    intent.putExtra("cost", cost1);
+                    intent.putExtra("cal",temp);
+                    intent.putExtra("drink",drink);
+                    intent.putExtra("key",key1);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }
