@@ -180,39 +180,40 @@ public class FoodAnalyze extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         Map<String, ?> allEntries = sharedPreferences.getAll();
 
-        List<FoodData> foodDataList = new ArrayList<>();
         List<FoodData> foodDatabefore30 = new ArrayList<>();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        long currentTimeInMillis = calendar.getTimeInMillis();
-        // 현재 시간 가져오기
         Calendar currentTime = Calendar.getInstance();
+
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             String foodDataJson = entry.getValue().toString();
             if (!entry.getKey().startsWith("data_set_")) {
                 continue;
             }
-            Log.e("시발 : ",foodDataJson+" key "+entry.getKey());
+            Log.e("시발 : ", foodDataJson + " key " + entry.getKey());
             try {
                 FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
-                foodDataList.add(foodData);
-                String selectedDateStr = foodData.getSelectedDate(); // "2023년11월8일12시35분"와 같은 형식
-                if(selectedDateStr==null){
+                if (foodData == null || foodData.getSelectedDate() == null) {
+                    // 데이터가 null이거나 선택된 날짜가 null인 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                    Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
                     continue;
-                }else{
-                    Calendar selectedTime = parseSelectedDate(selectedDateStr);
-                    // 현재 시간과 선택한 시간의 차이를 일로 계산
-                    String test= String.valueOf(currentTime.getTimeInMillis());
+                }
 
-                    long diffMillis = currentTime.getTimeInMillis() - selectedTime.getTimeInMillis();
-                    int diffDays = (int) (diffMillis / (1000 * 60 * 60 * 24));
+                String selectedDateStr = foodData.getSelectedDate();
+                Calendar selectedTime = parseSelectedDate1(selectedDateStr);
 
-                    Log.e("시간 비교",String.valueOf(selectedTime.getTimeInMillis())+"  "+test+" "+diffDays);
-                    // 30일 이내인 경우만 추가
-                    if (diffDays <= 30) {
-                        foodDatabefore30.add(foodData);
-                    }
+                if (selectedTime == null) {
+                    // 선택된 날짜가 null인 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                    Log.e("Error parsing selected date", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
+                    continue;
+                }
+
+                // 현재 시간과 선택한 시간의 차이를 일로 계산
+                long diffMillis = currentTime.getTimeInMillis() - selectedTime.getTimeInMillis();
+                int diffDays = (int) (diffMillis / (1000 * 60 * 60 * 24));
+
+                Log.e("시간 비교", String.valueOf(selectedTime.getTimeInMillis()) + " " + currentTime.getTimeInMillis() + " " + diffDays);
+                // 30일 이내인 경우만 추가
+                if (diffDays <= 30) {
+                    foodDatabefore30.add(foodData);
                 }
 
             } catch (JsonSyntaxException e) {
@@ -223,6 +224,20 @@ public class FoodAnalyze extends AppCompatActivity {
         }
 
         return foodDatabefore30;
+    }
+
+    private Calendar parseSelectedDate1(String selectedDateStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy년MM월dd일HH시mm분", Locale.KOREA);
+            Date date = sdf.parse(selectedDateStr);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            return calendar;
+        } catch (ParseException e) {
+            // 날짜 파싱 오류가 발생한 경우, 로그를 남기고 null 반환
+            Log.e("Error parsing selected date", "Selected Date: " + selectedDateStr, e);
+            return null;
+        }
     }
 
     // 선택한 날짜 문자열을 파싱하여 Calendar 객체로 변환

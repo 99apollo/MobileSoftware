@@ -211,6 +211,10 @@ public class FoodInput extends AppCompatActivity {
                     Toast.makeText(FoodInput.this, "평가를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(selectedDate.equals("날짜 선택") || selectedTime.equals("시간선택")){
+                    Toast.makeText(FoodInput.this, "시간을 정해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 try {
                     // 가격이 정수가 아닌 경우 NumberFormatException이 발생할 수 있음
