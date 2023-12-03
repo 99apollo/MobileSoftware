@@ -198,6 +198,9 @@ public class FoodAnalyze extends AppCompatActivity {
                 FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
                 foodDataList.add(foodData);
                 String selectedDateStr = foodData.getSelectedDate(); // "2023년11월8일12시35분"와 같은 형식
+                if(selectedDateStr==null){
+                    continue;
+                }
                 Calendar selectedTime = parseSelectedDate(selectedDateStr);
                 // 현재 시간과 선택한 시간의 차이를 일로 계산
                 String test= String.valueOf(currentTime.getTimeInMillis());
