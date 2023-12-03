@@ -200,19 +200,21 @@ public class FoodAnalyze extends AppCompatActivity {
                 String selectedDateStr = foodData.getSelectedDate(); // "2023년11월8일12시35분"와 같은 형식
                 if(selectedDateStr==null){
                     continue;
-                }
-                Calendar selectedTime = parseSelectedDate(selectedDateStr);
-                // 현재 시간과 선택한 시간의 차이를 일로 계산
-                String test= String.valueOf(currentTime.getTimeInMillis());
+                }else{
+                    Calendar selectedTime = parseSelectedDate(selectedDateStr);
+                    // 현재 시간과 선택한 시간의 차이를 일로 계산
+                    String test= String.valueOf(currentTime.getTimeInMillis());
 
-                long diffMillis = currentTime.getTimeInMillis() - selectedTime.getTimeInMillis();
-                int diffDays = (int) (diffMillis / (1000 * 60 * 60 * 24));
+                    long diffMillis = currentTime.getTimeInMillis() - selectedTime.getTimeInMillis();
+                    int diffDays = (int) (diffMillis / (1000 * 60 * 60 * 24));
 
-                Log.e("시간 비교",String.valueOf(selectedTime.getTimeInMillis())+"  "+test+" "+diffDays);
-                // 30일 이내인 경우만 추가
-                if (diffDays <= 30) {
-                    foodDatabefore30.add(foodData);
+                    Log.e("시간 비교",String.valueOf(selectedTime.getTimeInMillis())+"  "+test+" "+diffDays);
+                    // 30일 이내인 경우만 추가
+                    if (diffDays <= 30) {
+                        foodDatabefore30.add(foodData);
+                    }
                 }
+
             } catch (JsonSyntaxException e) {
                 // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
                 Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
