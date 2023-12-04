@@ -10,72 +10,93 @@
 
     <Button
         android:id="@+id/inputFood"
-        android:layout_width="45sp"
-        android:layout_height="45sp"
+        android:layout_width="57sp"
+        android:layout_height="57sp"
         android:background="@drawable/btest_12"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.905" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="식사 입력"
-        app:layout_constraintBottom_toBottomOf="@+id/ididid"
-        app:layout_constraintEnd_toStartOf="@+id/ididid"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ididid" />
+        app:layout_constraintEnd_toEndOf="@+id/inputFood"
+        app:layout_constraintStart_toStartOf="@+id/inputFood"
+        app:layout_constraintTop_toBottomOf="@+id/inputFood" />
 
-    <Button
-        android:id="@+id/viewFood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tv_stroke_rect"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:text="식사 보기"
-        app:layout_constraintBottom_toBottomOf="@+id/analyzeFood"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.676"
-        app:layout_constraintStart_toStartOf="@+id/analyzeFood"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/analyzeFood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tv_solid_rect"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:text="식사 분석"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.294"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.898"
-
-        />
-
-    <Button
-        android:id="@+id/ididid"
-        android:layout_width="45sp"
-        android:layout_height="45sp"
-        android:background="@drawable/atest_12"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/testForInfo"
-        android:layout_width="45sp"
-        android:layout_height="45sp"
+        android:layout_width="57sp"
+        android:layout_height="57sp"
         android:background="@drawable/ctest_12"
-        android:text="test"
-        app:layout_constraintBottom_toBottomOf="@+id/ididid"
+        app:layout_constraintBottom_toBottomOf="@+id/inputFood"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ididid"
-        app:layout_constraintTop_toTopOf="@+id/ididid" />
+        app:layout_constraintStart_toEndOf="@+id/inputFood"
+        app:layout_constraintTop_toTopOf="@+id/inputFood" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="식사 분석"
+        app:layout_constraintEnd_toEndOf="@+id/testForInfo"
+        app:layout_constraintStart_toStartOf="@+id/testForInfo"
+        app:layout_constraintTop_toBottomOf="@+id/testForInfo" />
+
+    <!--놀이 목록-->
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:onClick="onFab1Clicked"
+        android:src="@drawable/atest_12"
+        app:borderWidth="2dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@id/testpopup"
+        app:layout_constraintEnd_toEndOf="@id/testpopup"
+        app:layout_constraintStart_toStartOf="@id/testpopup"
+        app:layout_constraintTop_toTopOf="@id/testpopup" />
+
+    <!--놀이 목록-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:onClick="onFab2Clicked"
+        android:src="@drawable/clipboard_7326936"
+        app:borderWidth="2dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@id/testpopup"
+        app:layout_constraintEnd_toEndOf="@id/testpopup"
+        app:layout_constraintStart_toStartOf="@id/testpopup"
+        app:layout_constraintTop_toTopOf="@id/testpopup" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/testpopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:onClick="ontestpopupClicked"
+        android:src="@drawable/data_hosting_information"
+        app:borderWidth="2sp"
+        app:layout_constraintBottom_toBottomOf="@+id/inputFood"
+        app:layout_constraintEnd_toStartOf="@+id/inputFood"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/inputFood" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

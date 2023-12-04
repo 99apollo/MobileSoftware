@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,7 @@ public class DayInfo extends AppCompatActivity {
     private boolean needToRestartActivity = false;
     private ProgressBar progressBar;
     List<FoodData> foodList=new ArrayList<>();
+    private CircularProgressBar circularProgressBar;
     @Override
     protected void onResume() {
         super.onResume();
@@ -220,7 +222,7 @@ public class DayInfo extends AppCompatActivity {
                 testFun(foodList);
             }
         });
-
+        circularProgressBar = findViewById(R.id.progressBarTest1);
         Button Before =findViewById(R.id.DayBefore);
         List<FoodData> sortedList = new ArrayList<>(foodList); // 기존 리스트를 복제하여 새로운 리스트 생성
         List<FoodData> sortedList1 = new ArrayList<>(foodList);
@@ -342,13 +344,6 @@ public class DayInfo extends AppCompatActivity {
                 recyclerView3.setVisibility(View.GONE);
                 recyclerView2.setVisibility(View.GONE);
                 recyclerView1.setVisibility(View.GONE);
-            }
-        });
-        Button back =findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
 
@@ -477,7 +472,9 @@ public class DayInfo extends AppCompatActivity {
         drinkCalText.setText(drinkCal+"칼로리");
         totalCalText.setText(totalCal+"/2000");
         progressBar = findViewById(R.id.progressBarTest);
+        circularProgressBar = findViewById(R.id.progressBarTest1);
         progressBar.setProgress(totalCal);
+        circularProgressBar.setProgress(totalCal);
     }
 
     private void showDatePickerDialog() {

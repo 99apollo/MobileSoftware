@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".DayInfo">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,32 +14,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="back" />
 
         <Button
             android:id="@+id/DayBefore"
             android:layout_width="42dp"
             android:layout_height="38dp"
-            android:layout_marginStart="5sp"
-            android:text="-" />
+            android:backgroundTint="@color/white"
+            android:text="-"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/DayToday"
+            app:layout_constraintHorizontal_bias="0.341"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/DayToday"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
-            android:text="ToDay" />
+            android:text="ToDay"
+            android:textColor="@color/white"
+            android:background="@drawable/test11"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/NextDay"
             android:layout_width="42dp"
             android:layout_height="38dp"
-            android:text="+" />
+            android:text="+"
 
-    </LinearLayout>
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.659"
+            app:layout_constraintStart_toEndOf="@+id/DayToday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout7"
@@ -57,8 +72,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="칼로리"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/progressBarTest1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,14 +83,13 @@
             android:layout_width="261dp"
             android:layout_height="15dp"
             android:layout_centerVertical="true"
-            android:layout_marginTop="8dp"
             android:max="2000"
             android:progress="300"
             android:progressTint="@color/colorPrimary"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBarTest1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.843"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/cal_setting_test"
@@ -83,10 +97,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="칼로리"
-            app:layout_constraintBottom_toBottomOf="@+id/progressBarTest"
-            app:layout_constraintEnd_toStartOf="@+id/progressBarTest"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/progressBarTest" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/progressBarTest1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:cpb_background_progressbar_color="#BDBDBD"
+            app:cpb_progress="300"
+            app:cpb_progress_max="2000"
+            app:cpb_progressbar_color="@color/colorPrimary"
+            app:cpb_progressbar_width="10dp"
+            app:cpb_start_angle="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -130,6 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:text="v"
+                android:backgroundTint="@color/white"
                 android:id="@+id/breakfastInfo"
                 android:textSize="10sp" />
 
@@ -188,6 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:text="v"
+                android:backgroundTint="@color/white"
                 android:id="@+id/lunchInfo"
                 android:textSize="10sp" />
 
@@ -246,6 +278,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:text="v"
+                android:backgroundTint="@color/white"
                 android:id="@+id/dinnerInfo"
                 android:textSize="10sp" />
 
@@ -301,6 +334,7 @@
                 android:layout_marginStart="90dp"
                 android:id="@+id/drinkInfo"
                 android:text="v"
+                android:backgroundTint="@color/white"
                 android:textSize="10sp" />
 
         </LinearLayout>

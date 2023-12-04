@@ -74,19 +74,19 @@ public class FoodAnalyze extends AppCompatActivity {
             totalCost+=entry.getCost();
             // 조식, 중식, 석식, 음료에 해당하는 칼로리 업데이트
             if (Type.equals("조식")) {
-                brekfastCal+=entry.getCalories();
+                brekfastCal+=entry.getCost();
             } else if (Type.equals("중식")) {
-                lunchCal+=entry.getCalories();
+                lunchCal+=entry.getCost();
             } else if (Type.equals("석식")) {
-                dinnerCal+=entry.getCalories();
+                dinnerCal+=entry.getCost();
             } else if (Type.equals("음료")) {
-                drinkCal+=entry.getCalories();
+                drinkCal+=entry.getCost();
             }
             totalCal+=entry.getCalories();
             calendarDayList.add(convertToCalendarDay(entry.getDate()));
         }
         TextView recent =findViewById(R.id.recent30days);
-        recent.setText("최근 30일\n 총 칼로리: "+totalCal+"\n 총 비용 : "+totalCost+"\n 조식 칼로리 : "+brekfastCal+"\n 중식 칼로리 : "+lunchCal+"\n 석식 칼로리 : "+dinnerCal+"\n 음료 칼로리 : "+drinkCal);
+        recent.setText("최근 30일\n 총 칼로리: "+totalCal+"\n 총 비용 : "+totalCost+"\n 조식 비용 : "+brekfastCal+"\n 중식 비용 : "+lunchCal+"\n 석식 비용 : "+dinnerCal+"\n 음료 비용 : "+drinkCal);
 
 
         // SharedPreferences에서 데이터 개수를 가져옴

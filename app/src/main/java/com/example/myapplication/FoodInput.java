@@ -215,7 +215,14 @@ public class FoodInput extends AppCompatActivity {
                     Toast.makeText(FoodInput.this, "시간을 정해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if(selectedType.equals("종류")){
+                    Toast.makeText(FoodInput.this, "종류를 골라주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(selectedPlace.equals("장소")){
+                    Toast.makeText(FoodInput.this, "장소를 정해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 try {
                     // 가격이 정수가 아닌 경우 NumberFormatException이 발생할 수 있음
                     Integer.parseInt(cost);

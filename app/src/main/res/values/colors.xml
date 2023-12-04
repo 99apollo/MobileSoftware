@@ -12,7 +12,7 @@
 
     <color name="dataAvailableColor">#FF0000</color> <!-- 여기서는 빨간색을 사용하겠습니다. -->
 
-    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimary">#00C689</color>
     <color name="colorPrimaryDark">#1976D2</color>
     <color name="colorAccent">#FF4081</color>
 </resources>
