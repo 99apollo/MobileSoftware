@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -233,17 +234,23 @@ public class FoodViewChange extends AppCompatActivity {
 
                 int cal=calories(foodName,subName,drink,FoodViewChange.this);
                 // 입력 값 검증
-                Bitmap imageBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                if (imageBitmap == null) {
-                    Toast.makeText(FoodViewChange.this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
                 if (evlText.isEmpty()) {
                     Toast.makeText(FoodViewChange.this, "평가를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if(selectedDate.equals("날짜 선택") || selectedTime.equals("시간선택")){
+                    Toast.makeText(FoodViewChange.this, "시간을 정해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(selectedType.equals("종류")){
+                    Toast.makeText(FoodViewChange.this, "종류를 골라주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(selectedPlace.equals("장소")){
+                    Toast.makeText(FoodViewChange.this, "장소를 정해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 try {
                     // 가격이 정수가 아닌 경우 NumberFormatException이 발생할 수 있음
                     Integer.parseInt(cost);
