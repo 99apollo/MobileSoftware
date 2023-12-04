@@ -152,7 +152,6 @@
 
         <TextView
             android:id="@+id/textView1"
-            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -164,11 +163,12 @@
 
         <TextView
             android:id="@+id/drink_click"
-            style="@style/AppTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/edit_testui"
+            android:layout_width="97dp"
+            android:layout_height="31dp"
             android:layout_marginStart="10dp"
             android:text="음료 입력"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/textView1"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -178,9 +178,11 @@
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
 
         <TextView
@@ -255,8 +257,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
-        android:layout_width="415dp"
-        android:layout_height="54dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -267,25 +269,24 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
+            android:layout_marginStart="36dp"
             android:text="비용"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/costText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.137" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/costText"
             android:layout_width="265dp"
             android:layout_height="25dp"
             android:background="@drawable/edit_testui"
+            android:gravity="center"
             android:hint="비용 입력"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.264"
-            app:layout_constraintStart_toStartOf="@+id/textView5"
-            android:gravity="center"/>
+            app:layout_constraintStart_toStartOf="@+id/textView5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

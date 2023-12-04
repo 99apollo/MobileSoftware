@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +97,6 @@ public class FoodView extends AppCompatActivity {
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), FoodInput.class);
                 startActivity(intent);
             }
@@ -104,7 +105,6 @@ public class FoodView extends AppCompatActivity {
         analyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), FoodAnalyze.class);
                 startActivity(intent);
             }
@@ -221,7 +221,8 @@ public class FoodView extends AppCompatActivity {
         breakfast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDynamicPopupMenu(view,dataList);
+                List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
+                showDynamicPopupMenu(view,filteredDataList1);
 
             }
         });
@@ -229,35 +230,63 @@ public class FoodView extends AppCompatActivity {
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTypePopupMenu(view,dataList);
+                List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
+                showTypePopupMenu(view,filteredDataList1);
 
             }
         });
 
 
     }
-    private void typeChoose(Button item,List<FoodData> dataList){
-        String temp= (String) item.getText();
+    public List<FoodData> getAllFoodDataFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+        List<FoodData> foodDataList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String foodDataJson = entry.getValue().toString();
+            if (!entry.getKey().startsWith("data_set_")) {
+                continue;
+            }
+            Log.e("test : ", foodDataJson + " key " + entry.getKey());
+
+            try {
+                FoodData foodData = new Gson().fromJson(foodDataJson, FoodData.class);
+                foodDataList.add(foodData);
+            } catch (JsonSyntaxException e) {
+                // 데이터 형식이 일치하지 않는 경우, 로그를 남기고 다음 엔트리로 건너뜀
+                Log.e("Error parsing data", "Key: " + entry.getKey() + ", Value: " + foodDataJson);
+            }
+        }
+
+        return foodDataList;
+    }
+    private void typeChoose(String item,List<FoodData> dataList){
+        List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
+        String temp= item;
         if(temp.equals("조식")){
-            filterData("조식",dataList);
+            filterData("조식",filteredDataList1);
         }else if(temp.equals("중식")){
-            filterData("중식",dataList);
+            filterData("중식",filteredDataList1);
         }else if(temp.equals("석식")){
-            filterData("석식",dataList);
+            filterData("석식",filteredDataList1);
         }else{
-            filterData("음료",dataList);
+            filterData("음료",filteredDataList1);
         }
     }
-    private void placeChoose(Button item,List<FoodData> dataList){
-        String temp= (String) item.getText();
+    private void placeChoose(String item,List<FoodData> dataList){
+        List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
+        String temp= item;
         if(temp.equals("상록원 3층")){
-            filterPlaceData("상록원 3층",dataList);
+            filterPlaceData("상록원 3층",filteredDataList1);
         }else if(temp.equals("상록원 2층")){
-            filterPlaceData("상록원 2층",dataList);
+            filterPlaceData("상록원 2층",filteredDataList1);
         }else if(temp.equals("기숙사")){
-            filterPlaceData("기숙사",dataList);
+            filterPlaceData("기숙사",filteredDataList1);
         }else{
-            filterPlaceData("기타",dataList);
+            filterPlaceData("기타",filteredDataList1);
         }
     }
     private void showDynamicPopupMenu(View view,List<FoodData> dataList) {
@@ -269,7 +298,9 @@ public class FoodView extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 String place_name= (String) menuItem.getTitle();
                 place.setText(place_name);
-                placeChoose(place,dataList);
+                List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
+                Button type=(Button) findViewById(R.id.drink);
+                placeChoose(place_name,filteredDataList1);
                 return true;
             }
         });
@@ -278,10 +309,10 @@ public class FoodView extends AppCompatActivity {
     }
     private void filterData(String dataType,List<FoodData> dataList) {
         List<FoodData> filteredDataList = new ArrayList<>();
+        List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
         Button place = findViewById(R.id.breakfast);
-        for (FoodData data : dataList) {
+        for (FoodData data : filteredDataList1) {
             if (data.getSelectedType().equals(dataType)) {
-
                 if(place.getText().equals("장소")){
                     filteredDataList.add(data);
                 }else{
@@ -317,13 +348,14 @@ public class FoodView extends AppCompatActivity {
     }
     private void filterPlaceData(String dataType,List<FoodData> dataList) {
         List<FoodData> filteredDataList = new ArrayList<>();
+        List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
         Button type = findViewById(R.id.drink);
-        for (FoodData data : dataList) {
+        for (FoodData data : filteredDataList1) {
             if (data.getSelectedPlace().equals(dataType)) {
                 if(type.getText().equals("종류")){
                     filteredDataList.add(data);
                 }else{
-                    if(data.getSelectedPlace().equals(type.getText())){
+                    if(data.getSelectedType().equals(type.getText())){
                         filteredDataList.add(data);
                     }
                 }
@@ -363,7 +395,8 @@ public class FoodView extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 String place_name= (String) menuItem.getTitle();
                 type.setText(place_name);
-                typeChoose(type,dataList);
+                List<FoodData> filteredDataList1 = getAllFoodDataFromPreferences();
+                typeChoose(place_name,filteredDataList1);
                 return true;
             }
         });
