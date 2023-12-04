@@ -89,7 +89,7 @@ public class FoodViewChange extends AppCompatActivity {
         String drink=intent.getStringExtra("drink");
         int cal = intent.getIntExtra("cal", defaultValue);
         String key = intent.getStringExtra("key");
-        String[] dateTimeParts = splitDateTime(date);
+        setDateTimeButtonText(date);
         if(type.equals("음료")){
             Log.e("typechoose",type);
             // 음식과 반찬 입력 레이아웃 숨김
@@ -103,7 +103,6 @@ public class FoodViewChange extends AppCompatActivity {
             findViewById(R.id.constraintLayout2).setVisibility(View.VISIBLE);
         }
         placebutton.setText(place);
-        dateButton.setText(date);
         // 음식 입력
         EditText foodInput = findViewById(R.id.food_input);
         foodInput.setText(food);
@@ -128,7 +127,6 @@ public class FoodViewChange extends AppCompatActivity {
                 showImageSourceOptions();
             }
         });
-        dateButton.setText(dateTimeParts[0]);
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,7 +139,6 @@ public class FoodViewChange extends AppCompatActivity {
             }
         });
         Button timeButton = findViewById(R.id.time_info); // 시간 선택
-        timeButton.setText(dateTimeParts[1]);
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -272,6 +269,25 @@ public class FoodViewChange extends AppCompatActivity {
             }
 
         });
+    }
+    private void setDateTimeButtonText(String dateTimeString) {
+        String[] dateTimeParts = splitDateTime(dateTimeString);
+
+        // dateTimeParts가 null이거나 길이가 2보다 작은 경우 처리
+        if (dateTimeParts == null || dateTimeParts.length < 2) {
+            // dateTimeParts가 null이거나 충분한 요소를 가지고 있지 않을 때의 처리
+            Log.e("DateTimeError", "유효하지 않은 날짜 및 시간 형식: " + dateTimeString);
+            return;
+        }
+
+        String datePart = dateTimeParts[0];
+        String timePart = dateTimeParts[1];
+        Log.e(" 시간 확인: ",datePart.toString()+"+"+timePart.toString());
+        Button dateButton = findViewById(R.id.select_date_time_button);
+        dateButton.setText(datePart);
+
+        Button timeButton = findViewById(R.id.time_info);
+        timeButton.setText(timePart);
     }
 
     //날짜 선택 관련 항목 코드
