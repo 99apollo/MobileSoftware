@@ -147,6 +147,22 @@ public class FoodViewChange extends AppCompatActivity {
                 showTimePickerDialog(timeButton);
             }
         });
+        typeButton.setText(type);
+        //장소 선정
+        placebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDynamicPopupMenu(view);
+            }
+        });
+
+        typeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTypePopupMenu(view);
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
