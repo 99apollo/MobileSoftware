@@ -118,12 +118,17 @@
         android:id="@+id/beverageLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
         android:visibility="gone"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
         tools:ignore="MissingConstraints"> <!-- 이 레이아웃은 초기에 숨겨짐으로 설정 -->
 
         <TextView
             android:id="@+id/textView1"
-            style="@style/AppTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -135,9 +140,11 @@
 
         <EditText
             android:id="@+id/drink_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="78dp"
+            android:layout_height="34dp"
             android:layout_marginStart="10dp"
+            android:background="@drawable/edit_testui"
+            android:gravity="center"
             android:hint="음료 입력"
             app:layout_constraintStart_toEndOf="@+id/textView1"
             app:layout_constraintTop_toTopOf="parent" />
@@ -199,9 +206,13 @@
         android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="129dp"
+        android:layout_marginTop="92dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/textView4"
@@ -221,8 +232,8 @@
             android:layout_height="94dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/edit_testui"
-            android:hint="평가 입력"
             android:gravity="center"
+            android:hint="평가 입력"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
