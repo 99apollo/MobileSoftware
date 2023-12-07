@@ -193,19 +193,8 @@ public class FoodView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 데이터를 저장하고 있는 dataList을 초기화
-                List<FoodData> dataList = new ArrayList<>();
-
-                for (int i = 0; i < dataSetCount; i++) {
-                    String dataSetKey = "data_set_" + i;
-                    String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
-                    if (!dataJson.isEmpty()) {
-                        // JSON 데이터를 FoodData 객체로 파싱
-                        FoodData data = new Gson().fromJson(dataJson, FoodData.class);
-                        dataList.add(data);
-                    }
-                }
+                List<FoodData> dataList = getAllFoodDataFromPreferences();
                 Log.e("test",dataList.toString());
-
                 breakfast.setText("장소");
                 drink.setText("종류");
                 // FoodDataAdapter를 초기화하고 RecyclerView에 설정
