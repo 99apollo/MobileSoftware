@@ -41,9 +41,18 @@ public class FoodView extends AppCompatActivity {
             String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
             if (!dataJson.isEmpty()) {
                 // JSON 데이터를 FoodData 객체로 파싱
-                FoodData data = new Gson().fromJson(dataJson, FoodData.class);
-                dataList.add(data);
-                Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
+                try {
+                    FoodData data = new Gson().fromJson(dataJson, FoodData.class);
+                    dataList.add(data);
+                    Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
+                    // Gson을 사용하여 JSON 파싱하는 코드
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                    Log.e("error json",dataJson);
+                    // 예외 처리 로직 추가
+                }
+
+
             }
 
 
@@ -136,9 +145,16 @@ public class FoodView extends AppCompatActivity {
             String dataJson = sharedPreferences.getString(dataSetKey, ""); // JSON 형식의 데이터 가져오기
             if (!dataJson.isEmpty()) {
                 // JSON 데이터를 FoodData 객체로 파싱
-                FoodData data = new Gson().fromJson(dataJson, FoodData.class);
-                dataList.add(data);
-                Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
+                try {
+                    FoodData data = new Gson().fromJson(dataJson, FoodData.class);
+                    dataList.add(data);
+                    Log.e("test",data.getSelectedDate()+"  중간다리  "+data.getImagePath());
+                    // Gson을 사용하여 JSON 파싱하는 코드
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                    // 예외 처리 로직 추가
+                }
+
             }
 
 
